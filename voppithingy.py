@@ -55,6 +55,7 @@ class Interactive {
 		virtual void move() {}
 		virtual void act() {}
 		void skip() {}
+		virtual void draw() {}
 }
 
 class MovingObj: public Interactive {
@@ -109,6 +110,7 @@ void Ship::bump() {
 }
 
 void Ship::act() {
+	move();
 	bump();
 }
 	
@@ -117,6 +119,26 @@ Ship::leavefac() {
 		act = defact;
 		act();
 	}
+}
+
+Interactive* Factory::spawn_menu(Ship* s) {
+	FacMenu* top = new FacMenu(s);
+	FacMenu* tmp; int i;
+	
+	// by default, options go deeper with the "next" function
+	// (takes current param from calling context)
+	top->add_option("queue", top->next);
+	top->add_option("install", top->next);
+	top->add_option("deploy", top->next);
+	
+	tmp = top->option("install");
+	for (i=s->cargo.begin(); i<s->cargo.end(); i++) {
+		// fac_select takes the factory as param, maybe?
+		// or a factory function that can also take the same param as next
+		// does different things depending on mineral/weapon
+		tmp.add_option(s->cargo[i]->describe(), /*factory->*/select);
+	}
+	return top;
 }
 
 if (ship->collide(factory)) {
@@ -155,12 +177,12 @@ Weapon* Weapon::register_fac() {
 }
 
 template <class T>
-void Level::remove(T* obj) {
+void State::remove(T* obj) {
 	erasebuffer.push_back(T);
 }
 
 template <class T>
-void Level::remove2() {
+void State::remove2() {
 	// called every frame, erasebuffer.length can be zero and this is skipped
 	int i,f;
 	//for (i=erasebuffer.begin(),i<erasebuffer.end(),i++) {
@@ -179,12 +201,39 @@ void Level::remove2() {
 	}
 }
 
+class State {
+	public:
+		std::vector<Interactive*> objects;
+		std::vector<Interactive*> introbuffer;
+		std::vector<Interactive*> erasebuffer;
+		void add();
+		void add2();
+		void remove();
+		void remove2();
+		virtual void mainloop();
+}
+
+class GM: public State {
+	// game states are a stack, this is the in-game one
+	// when esc is pressed whenever you're here, it drops back into the menu
+	// probably adds some listener object that can do anims for that etc.
+	public:
+		explicit GM(): State() {
+		}
+		virtual void mainloop();
+}
+
+bool GM::act() {
+
+}
+
 void GM::mainloop() {
 	int i;
-	for (i=objects.begin(); i<objects.end(); i++) {
-		objects[i].move();
-	}
-	for (i=objects.begin(); i<objects.end(); i++) {
-		objects[i].act();
-	}
+	//for (i=objects.begin(); i<objects.end(); i++) objects[i]->move();
+	for (i=objects.begin(); i<objects.end(); i++) objects[i]->act();
+	for (i=objects.begin(); i<objects.end(); i++) objects[i]->draw();
+	
+	// remove/add from buffers
+	remove2();
+	add2();
 }
