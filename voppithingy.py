@@ -40,6 +40,77 @@ class Factory(Interactive):
 		if (right) index++;
 		cap(&index, options.length);
 	}
+
+
+enum types {SHIP_TYPE=1, WEAPON_TYPE, MINERAL_TYPE};
+
+class Interactive {
+	public:
+		double x,y;
+		
+		explicit Interactive() { init(); }
+		virtual void init() {
+			type = 0;
+		}
+		virtual void move() {}
+		virtual void act() {}
+		void skip() {}
+}
+
+class MovingObj: public Interactive {
+	public:
+		double dx,dy,angle,speed,slow,grav;
+		
+		explicit MovingObj(): Interactive() {
+			dx=0.0; dy=0.0;
+			angle=0.0; speed=0.0;
+			slow=1.01; grav=0.1;
+		}
+		virtual void move() {}
+}
+
+class Ship: public MovingObj {
+	public:
+		Weapon* w1, w2;
+		double turn;
+		
+		explicit Ship(): MovingObj() {
+			turn = 0.4;
+		}
+		virtual void init() {
+			types stype;
+			stype = SHIP_TYPE;
+			type = stype;
+		}
+		virtual void move();
+		virtual void act();
+		virtual void bump();
+}
+
+void Ship::move() {
+	if (lkey) angle -= turn;
+	if (rkey) angle += turn;
+	
+	if (fwdkey) {
+		dx += cos(angle)*speed; dy += sin(angle)*speed;
+	}
+	if (backkey) {
+		dx /= slow*2; dy /= slow*2;
+	}
+	
+	dx /= slow; dy /= slow;
+	dy += grav;
+	
+	x += dx; y += dy;
+}
+
+void Ship::bump() {
+
+}
+
+void Ship::act() {
+	bump();
+}
 	
 Ship::leavefac() {
 	if (up) {
@@ -108,3 +179,12 @@ void Level::remove2() {
 	}
 }
 
+void GM::mainloop() {
+	int i;
+	for (i=objects.begin(); i<objects.end(); i++) {
+		objects[i].move();
+	}
+	for (i=objects.begin(); i<objects.end(); i++) {
+		objects[i].act();
+	}
+}
