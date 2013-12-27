@@ -267,9 +267,40 @@ Weapon* Weapon::register_fac() {
 	return new Weapon();
 }
 
-class Explosive: public Interactive() {
+class Explosive: public MovingObj() {
 	public:
-		explicit Explosive(): Interactive() {}		
+		explicit Explosive(): MovingObj() {}
+		void explode() {
+			remove();
+			gm.add(new Boom(/* at the same position with the same references */))
+		};
+}
+void Explosive::bump() {
+	// by default, explodes on collisions
+	if (collide(/* any interactive type/walls, not itself etc. */)) {
+		explode();
+	}
+}
+class Bomb: public Explosive() {
+	public:
+		explicit Bomb(): Explosive() {
+			// gets an initial push from the dropping ship
+			// so even dy might be negative at the start
+		}
+		virtual void move();
+}
+void Bomb::move() {
+	// just falls until it hits something in bump()
+	dx+=cos(angle);
+	dy+=grav;
+	y+=dy;
+}
+class Mine: public Explosive() {
+	public:
+		explicit Mine(): Explosive() {}
+		// maybe a silly for it not to move since it inherits from MovingObj
+		// but whatever man I ain't gonna make a disposable intermediate class
+		virtual void move() {}
 } 
 
 class Boom: public Interactive() {
