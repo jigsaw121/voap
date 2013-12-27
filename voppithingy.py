@@ -1,3 +1,6 @@
+# Pseudo-C++ in a Python file
+# SO IT HAS COME TO THIS
+
 class Interactive(object):
 	def __init__(self):
 		self.img = None
@@ -121,22 +124,39 @@ Ship::leavefac() {
 	}
 }
 
+void Factory::add_minerals(Mineral* m) {
+	minerals += m->value;
+}
+
+void Factory::register(Weapon* w) {
+	// actually needs to push a blueprint/identifier of itself for duplication...
+	registered.push_back(w);
+}
+
+void Factory::install(Interactive* obj) {
+	// where to convert weapons to minerals?
+	if (obj->type==MINERAL_TYPE) add_minerals(static_cast<*Mineral>(obj));
+	else /* weapon */ register(static_cast<*Weapon>(obj));
+}
+
 Interactive* Factory::spawn_menu(Ship* s) {
 	FacMenu* top = new FacMenu(s);
 	FacMenu* tmp; int i;
 	
 	// by default, options go deeper with the "next" function
 	// (takes current param from calling context)
-	top->add_option("queue", top->next);
-	top->add_option("install", top->next);
-	top->add_option("deploy", top->next);
+	// or could use added parameter
+	// or next is a special case which uses the submenu...
+	top->add_option("queue", top->next, null);
+	top->add_option("install", top->next, null);
+	top->add_option("deploy", top->next, null);
 	
 	tmp = top->option("install");
 	for (i=s->cargo.begin(); i<s->cargo.end(); i++) {
 		// fac_select takes the factory as param, maybe?
 		// or a factory function that can also take the same param as next
 		// does different things depending on mineral/weapon
-		tmp.add_option(s->cargo[i]->describe(), /*factory->*/select);
+		tmp.add_option(s->cargo[i]->describe(), /*factory->*/install, s->cargo[i]);
 	}
 	return top;
 }
