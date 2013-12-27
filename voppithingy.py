@@ -124,39 +124,61 @@ Ship::leavefac() {
 	}
 }
 
-void Factory::add_minerals(Mineral* m) {
-	minerals += m->value;
-}
-
-void Factory::register(Weapon* w) {
-	// actually needs to push a blueprint/identifier of itself for duplication...
-	registered.push_back(w);
-}
-
+/*
+screw casts yo
 void Factory::install(Interactive* obj) {
 	// where to convert weapons to minerals?
 	if (obj->type==MINERAL_TYPE) add_minerals(static_cast<*Mineral>(obj));
 	else /* weapon */ register(static_cast<*Weapon>(obj));
 }
+*/
+
+void FacMenu::add_option(std::string id, Interactive* cons, Factory* fact) {
+	FacMenu* nxt = new FacMenu(fact, id);
+	options.push_back(nxt);
+	// consequence function called for cons
+	nxt->onclick = cons;
+}
+
+void FacMenu::act() {
+	// draw images of the options I guess
+	// and select things and animate transitions when the selection changes 
+}
+void Interactive::consequence(Factory* ignore) {
+}
+void FacMenu::consequence(Factory* ignore) {
+	// you've set the right index before coming here
+	if (options.length==0) return;
+	gm.remove(this);
+	gm.add(options[index]);
+}
+void Mineral::consequence(Factory* f) {
+	f->minerals += value;
+}
+void Weapon::consequence(Factory* f) {
+	// actually needs to push a blueprint/identifier of itself for duplication...
+	// which smells like a factory pattern
+	f->registered.push_back(this);
+}
 
 Interactive* Factory::spawn_menu(Ship* s) {
-	FacMenu* top = new FacMenu(s);
+	FacMenu* top = new FacMenu(this, "factory");
 	FacMenu* tmp; int i;
 	
 	// by default, options go deeper with the "next" function
 	// (takes current param from calling context)
 	// or could use added parameter
 	// or next is a special case which uses the submenu...
-	top->add_option("queue", top->next, null);
-	top->add_option("install", top->next, null);
-	top->add_option("deploy", top->next, null);
+	top->add_option("queue", top, this);
+	top->add_option("install", to, this);
+	top->add_option("deploy", top, this);
 	
 	tmp = top->option("install");
 	for (i=s->cargo.begin(); i<s->cargo.end(); i++) {
 		// fac_select takes the factory as param, maybe?
 		// or a factory function that can also take the same param as next
 		// does different things depending on mineral/weapon
-		tmp.add_option(s->cargo[i]->describe(), /*factory->*/install, s->cargo[i]);
+		tmp.add_option(s->cargo[i]->describe(), /*factory->*/install, this);
 	}
 	return top;
 }
