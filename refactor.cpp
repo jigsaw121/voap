@@ -1,13 +1,13 @@
 # Pseudo-C++ in a Python file
 # SO IT HAS COME TO THIS
 
-class Interactive(object):
+/*class Interactive(object):
 	def __init__(self):
 		self.img = None
 
 class Factory(Interactive):
 	def __init__(self):
-		super()
+		super()*/
 	int menu = 0;
 	menus = std::vector<Menu*> gen_menus()
 	std::vector<Menu*> Factory::gen_menus() {
