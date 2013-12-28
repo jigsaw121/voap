@@ -262,6 +262,38 @@ Weapon* Interactive::register_fac() {
 	return null;
 }
 
+class Module: public MovingObj() {
+	// MovingObj because there'll be physical modules on ship drops
+	// before that, they're not updated (and not added to gm)
+	// alternatively, encapsulate them in a separate moving fragment...
+	public:
+		explicit Module(): MovingObj() {}
+		virtual void move();
+}
+void Module::move() {
+	// just falls until it hits something in bump()
+	dx+=cos(angle);
+	dy+=grav;
+	y+=dy;
+}
+class Weapon: public Module() {
+	public:
+		explicit Weapon(): Module() {}
+		virtual void act();
+}
+class TrailMod: public Module() {
+	// attributes changed depending on ship
+	public:
+		explicit Weapon(): Module() {}
+		virtual void act();
+}
+void TrailMod::act() {
+	// module follows ship, constantly spawns trail atoms that block/hurt
+	// trails disappear after a while
+	// can be toggled on/off to save power
+	gm.add(/* new trail of the current type at this pos */);
+}
+
 // any weapon creates a prototype of itself (overridden)
 Weapon* Weapon::register_fac() {
 	return new Weapon();
@@ -286,6 +318,7 @@ class Bomb: public Explosive() {
 		explicit Bomb(): Explosive() {
 			// gets an initial push from the dropping ship
 			// so even dy might be negative at the start
+			// a grenade would be just a bomb with a stronger initial push, heh
 		}
 		virtual void move();
 }
@@ -300,6 +333,8 @@ class Mine: public Explosive() {
 		explicit Mine(): Explosive() {}
 		// maybe a silly for it not to move since it inherits from MovingObj
 		// but whatever man I ain't gonna make a disposable intermediate class
+		// mines are disabled when the host dies
+		// can also be rendered useless by other means
 		virtual void move() {}
 } 
 
