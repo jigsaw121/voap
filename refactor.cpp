@@ -49,9 +49,13 @@ enum types {SHIP_TYPE=1, WEAPON_TYPE, MINERAL_TYPE};
 
 class Interactive {
 	public:
+		State* gm;
 		double x,y;
 		
-		explicit Interactive() { init(); }
+		explicit Interactive(State* _gm) { 
+			gm = _gm;
+			init(); 
+		}
 		~Interactive() {}
 		virtual void init() {
 			type = 0;
@@ -63,6 +67,19 @@ class Interactive {
 		virtual void act() {}
 		void skip() {}
 		virtual void draw() {}
+		virtual void remove() {
+			// dying would also have a consequence of delete this; at gm's remove2()
+			// but it can't be automatically implemented since sometimes temporary deactivation is useful
+			gm.remove(this);
+		}
+}
+void Ship::remove() {
+	// in addition to the ship dying, there may be consequences from modules
+	gm.remove(this);
+	// I really wish I could do reflection like bothmods(die_consequence);
+	// also an empty module might just be a placeholder item rather than a null pointer
+	if (m1) m1.die_consequence();
+	if (m2) m2.die_consequence();
 }
 
 class MovingObj: public Interactive {
@@ -179,11 +196,20 @@ void Module::deploy(Factory* f) {
 	// deploy to visitor ship
 }
 void Weapon::deploy(Factory* f) {
-	// swap the factory user's weapon with this
-	// (the old weapon can then be redeployed to someone else or converted to minerals)
-	f->visitor->weapon()->install(f);
+	// swap the factory user's module with this
+	// (the old module can then be redeployed to someone else or converted to minerals)
+	f->visitor->module()->install(f);
 	f->visitor->change_weapon(this);
 }
+
+void Shield::damage(Bullet* b) {
+	// because of lasers and the like, disappearing after dealing damage
+	// depends on the bullet itself's behaviour
+	// what blocking means is just implemented differently
+	if (/* touches a newer shield */) b.block_by(this);
+	else /* damage normally */
+}
+
 FacMenu* FacMenu::option(std::string getid) {
 	// returns the facmenu with the matching id from its own options
 }
@@ -387,12 +413,12 @@ class WallAmbassador: public Interactive() {
 		explicit WallAmbassador(): Interactive() {}
 }
 
+/*
 template <class T>
 void State::remove(T* obj) {
 	erasebuffer.push_back(T);
-}
+}*/
 
-template <class T>
 void State::remove2() {
 	// called every frame, erasebuffer.length can be zero and this is skipped
 	int i,f;
@@ -411,17 +437,40 @@ void State::remove2() {
 		erasebuffer.pop(0);
 	}
 }
+void State::add2() {
+	// called every frame, erasebuffer.length can be zero and this is skipped
+	while (introbuffer.length) {
+		// or last element for faster removes
+		// assume it's not there several times
+		f = objects.find(erasebuffer[0]);
+		if (f == -1) {
+			// wut?
+			erasebuffer.pop(0);
+			continue;
+		}
+		objects.erase(objects.begin()+f,objects.begin()+f+1);
+		// don't have to delete, might be just temporarily deactivated
+		//delete erasebuffer[0];
+		erasebuffer.pop(0);
+	}
+}
 
 class State {
 	public:
 		std::vector<Interactive*> objects;
 		std::vector<Interactive*> introbuffer;
 		std::vector<Interactive*> erasebuffer;
-		void add();
+		void add(Interactive*);
 		void add2();
-		void remove();
+		void remove(Interactive*);
 		void remove2();
 		virtual void mainloop();
+}
+State::add(Interactive* obj) {
+	introbuffer.push_back(obj);
+}
+State::remove(Interactive* obj) {
+	erasebuffer.push_back(obj);
 }
 
 class GM: public State {
