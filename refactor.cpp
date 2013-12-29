@@ -83,7 +83,7 @@ class MovingObj: public Interactive {
 
 class Ship: public MovingObj {
 	public:
-		Weapon* w1, w2;
+		Module* m1, m2;
 		double turn;
 		
 		explicit Ship(): MovingObj() {
@@ -279,8 +279,34 @@ void Module::move() {
 class Weapon: public Module() {
 	public:
 		explicit Weapon(): Module() {}
+		virtual void shoot() {}
 		virtual void act();
 }
+class Flamer: public Weapon() {
+	public:
+		explicit Flamer(): Weapon() {}
+		virtual void shoot();
+}
+void Flamer::shoot() {
+	// by default, shoots plain flames, spreading in slightly varied angle/speed
+	// can also shoot sticky flames that follow an enemy ship around, dealing constant damage
+}
+
+class Rocket: public Explosive() {
+	public:
+		explicit Rocket(): Explosive() {}
+}
+void Rocket::move() {
+	// behaviour: slow down at the start, then accelerate
+	// note that speed starts out as negative
+	double sp = abs(speed);
+	cap(&sp, 16);
+	dx += cos(angle)*sp;
+	dy += sin(angle)*sp;
+	
+	speed+=0.1;
+}
+
 class TrailMod: public Module() {
 	// attributes changed depending on ship
 	public:
