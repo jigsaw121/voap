@@ -51,22 +51,50 @@ class Interactive {
 	public:
 		State* gm;
 		double x,y,w,h;
+		int type;
 		
-		explicit Interactive(State* _gm) { 
+		sf::Image img;
+        sf::Sprite spr;
+		
+		explicit Interactive(State* _gm, double _x, double _y) { 
+			initall(_gm,_x,_y);
+		}
+		~Interactive() {
+			delete img;
+			//delete spr;
+		}
+		virtual void initall(State* _gm, double _x, double _y) {
+			// in case there's ever some weird behaviour
 			gm = _gm;
-			init(); 
+			dimsinit();
+			shareinit(_x,_y); 
+			typeinit();
+			imginit();
 		}
-		~Interactive() {}
-		virtual void init() {
-			type = 0;
+		virtual void shareinit(double _x, double _y) { x = _x; y = _y; }
+		// default-y values for the rest of the init functions
+		virtual void dimsinit() { w = 24; h = 24; }
+		virtual void typeinit() { type = 0; }
+		virtual void imginit() {
+			img.Create(w, h, sf::Color(128, 128, 128, 255));
+			img.SetSmooth(false);
+			spr.SetImage(img);
+			spr.SetCenter(0.5, 0.5);
 		}
+		
+		void skip() {}
+		
 		virtual Interactive* spawn() {
 			return new Interactive();
 		}
 		virtual void move() {}
 		virtual void act() {}
-		void skip() {}
-		virtual void draw() {}
+		virtual void draw() {
+			// really? am I supposed to do it like this?
+			sf::Vector2<float> pos = get_active_layer()->get_pos();
+			spr.SetPosition(pos.x+x, pos.y+y);
+			screen().Draw(spr);
+		}
 		virtual void remove() {
 			// dying would also have a consequence of delete this; at gm's remove2()
 			// but it can't be automatically implemented since sometimes temporary deactivation is useful
@@ -324,8 +352,12 @@ class Module: public MovingObj() {
 	// before that, they're not updated (and not added to gm)
 	// alternatively, encapsulate them in a separate moving fragment...
 	public:
-		explicit Module(): MovingObj() {}
+		Ship* host;
+		
+		explicit Module(State* _gm, double _x, double _y, Ship* _host): MovingObj(_gm,_x,_y) { host = _host; }
 		virtual void move();
+		// when a ship dies it calls this
+		virtual void die_consequence() {}
 }
 void Module::move() {
 	// just falls until it hits something in bump()
@@ -387,7 +419,8 @@ class Explosive: public MovingObj() {
 		explicit Explosive(): MovingObj() {}
 		void explode() {
 			remove();
-			gm.add(new Boom(/* at the same position with the same references */))
+			// a boom gets centered in that position though
+			gm.add(new Boom(gm,x,y));
 		};
 }
 void Explosive::bump() {
@@ -499,16 +532,25 @@ class GM: public State {
 	// when esc is pressed whenever you're here, it drops back into the menu
 	// probably adds some listener object that can do anims for that etc.
 	public:
+		int exitflag = 0;
 		explicit GM(): State() {
 		}
-		virtual void mainloop();
+		virtual bool mainloop();
 }
 
-bool GM::act() {
-
+void Layer::start_camerafollow(Interactive* obj) {
+	// starts camerafollowing this... in its own context
+	follow = obj;
+}
+void Layer::camerafollow() {
+	if (!follow) return;
+	offset_x = (follow.x + offset_x)/2;
+	offset_y = (follow.y + offset_y)/2;
 }
 
-void GM::mainloop() {
+bool GM::mainloop() {
+	if (exitflag) return false;
+
 	int s = mstime(); double frame = 1000/60.0; 
 	
 	if (lag<0) lag=0;
@@ -526,8 +568,7 @@ void GM::mainloop() {
 	}
 	
 	// actually remove/add from buffers
-	remove2();
-	add2();
+	remove2(); add2();
 
 	// how much we're lagging from the desired fps
 	// if negative (=we're ahead), gets fixed when setting _lag next frame
@@ -537,4 +578,7 @@ void GM::mainloop() {
 	// note that _lag is at least 0
 	while (mstime()-s < frame-_lag)
 		;
+		
+	return true;
 }
+
