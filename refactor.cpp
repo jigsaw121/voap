@@ -50,7 +50,7 @@ enum types {SHIP_TYPE=1, WEAPON_TYPE, MINERAL_TYPE};
 class Interactive {
 	public:
 		State* gm;
-		double x,y;
+		double x,y,w,h;
 		
 		explicit Interactive(State* _gm) { 
 			gm = _gm;
@@ -73,6 +73,35 @@ class Interactive {
 			gm.remove(this);
 		}
 }
+
+bool Interactive::collide(Interactive* obj) {
+	return /* AABB */;
+	// optimizations in searching for types
+}
+bool WallAmbassador::collide(Interactive* obj) {
+    // for objects with x,y,w,h
+    int x, y;
+    sf::Color c;
+    Layer* l = voap->art->get_active_layer();
+    sf::Vector2<float> pos = l->spr.GetPosition();
+	
+	if (obj->x < 0 || obj->x+obj->w >= l->w || obj->y < 0 || obj->y+obj->h >= l->h) return true;
+	
+    for (x=0; x<obj->w; x++) {
+        for (y=0; y<obj->h; y++) {
+            c = l->spr.GetPixel(o->x+x, o->y+y);
+			// (0,0,0) could also be any manually set transparent color
+			// if I ever add a level editor
+            if (c.a != 0 && (c.r!=0 || c.g!=0 || c.b!=0)) {
+                //std::cout<<(int)c.r<<" "<<(int)c.g<<" "<<(int)c.b<<" "<<(int)c.a<<"\n";
+                //std::cout<<o->x+x<<" "<<o->y+y<<"\n";
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 void Ship::remove() {
 	// in addition to the ship dying, there may be consequences from modules
 	gm.remove(this);
@@ -96,6 +125,7 @@ class MovingObj: public Interactive {
 			grav=0.1;
 		}
 		virtual void move() {}
+		virtual void push(double _dx, double _dy) { dx+=_dx; dy+=_dy; }
 }
 
 class Ship: public MovingObj {
@@ -142,7 +172,8 @@ void Ship::move() {
 }
 
 void Ship::bump() {
-
+	if (/* wallbump */) { x -= dx; y -= dy; }
+	if (/* shipbump */) { x -= dx; y -= dy; }
 }
 
 void Ship::act() {
@@ -438,20 +469,10 @@ void State::remove2() {
 	}
 }
 void State::add2() {
-	// called every frame, erasebuffer.length can be zero and this is skipped
+	// called every frame, introbuffer.length can be zero and this is skipped
 	while (introbuffer.length) {
-		// or last element for faster removes
-		// assume it's not there several times
-		f = objects.find(erasebuffer[0]);
-		if (f == -1) {
-			// wut?
-			erasebuffer.pop(0);
-			continue;
-		}
-		objects.erase(objects.begin()+f,objects.begin()+f+1);
-		// don't have to delete, might be just temporarily deactivated
-		//delete erasebuffer[0];
-		erasebuffer.pop(0);
+		objects.push_back(introbuffer[0]);
+		introbuffer.pop(0);
 	}
 }
 
@@ -488,12 +509,32 @@ bool GM::act() {
 }
 
 void GM::mainloop() {
+	int s = mstime(); double frame = 1000/60.0; 
+	
+	if (lag<0) lag=0;
+	double _lag = lag;
+	// warn/abort/skip drawing if lag gets too high
 	int i;
 	//for (i=objects.begin(); i<objects.end(); i++) objects[i]->move();
 	for (i=objects.begin(); i<objects.end(); i++) objects[i]->act();
-	for (i=objects.begin(); i<objects.end(); i++) objects[i]->draw();
+	// if drawing is taking too long (lag piled up from a couple of frames),
+	// might just skip a frame
+	if (lag<frame*3) {	
+		for (i=objects.begin(); i<objects.end(); i++) {
+			objects[i]->draw();
+		}
+	}
 	
-	// remove/add from buffers
+	// actually remove/add from buffers
 	remove2();
 	add2();
+
+	// how much we're lagging from the desired fps
+	// if negative (=we're ahead), gets fixed when setting _lag next frame
+	lag += mstime()-s - frame;
+	
+	// if we're ahead, let's just wait
+	// note that _lag is at least 0
+	while (mstime()-s < frame-_lag)
+		;
 }
