@@ -1,5 +1,5 @@
-# Pseudo-C++ in a Python file
-# SO IT HAS COME TO THIS
+// Pseudo-C++ in a Python file
+// SO IT HAS COME TO THIS
 
 class Interactive(object):
 	def __init__(self):
@@ -110,8 +110,8 @@ bool WallAmbassador::collide(Interactive* obj) {
     // for objects with x,y,w,h
     int x, y;
     sf::Color c;
-    Layer* l = voap->art->get_active_layer();
-    sf::Vector2<float> pos = l->spr.GetPosition();
+    Layer* l = get_active_layer();
+    sf::Vector2<float> pos = l->get_pos();
 	
 	if (obj->x < 0 || obj->x+obj->w >= l->w || obj->y < 0 || obj->y+obj->h >= l->h) return true;
 	
@@ -533,8 +533,7 @@ class GM: public State {
 	// probably adds some listener object that can do anims for that etc.
 	public:
 		int exitflag = 0;
-		explicit GM(): State() {
-		}
+		explicit GM(): State() {}
 		virtual bool mainloop();
 }
 
