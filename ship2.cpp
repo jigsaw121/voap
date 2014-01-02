@@ -3,7 +3,7 @@
 //#include <SFML/Keyboard.hpp>
 
 double rad(double n) {
-	return n*180/3.14159;
+    return n*180/3.14159;
 }
 
 void Ship::set_keys() {
@@ -13,40 +13,40 @@ void Ship::set_keys() {
     backkey = sf::Keyboard::Down;
 }
 void Ship::move() {
-	if (lkey) {
-		angle -= turn;
-		spr.rotate(rad(turn));
-	}
-	if (rkey) {
-		angle += turn;
-		spr.rotate(-rad(turn));
-	}
+    if (lkey) {
+        angle -= turn;
+        spr.rotate(rad(turn));
+    }
+    if (rkey) {
+        angle += turn;
+        spr.rotate(-rad(turn));
+    }
 
-	if (fwdkey) {
-		dx += cos(angle)*speed; dy += sin(angle)*speed;
-	}
-	if (backkey) {
-		dx /= slow*2; dy /= slow*2;
-	}
+    if (fwdkey) {
+        dx += cos(angle)*speed; dy += sin(angle)*speed;
+    }
+    if (backkey) {
+        dx /= slow*2; dy /= slow*2;
+    }
 
-	dx /= slow; dy /= slow;
-	dy += grav;
+    dx /= slow; dy /= slow;
+    dy += grav;
 
-	x += dx; y += dy;
+    x += dx; y += dy;
 }
 
 void Ship::bump() {
-	if (collideone(1) || collideone(2)) { x -= dx; y -= dy; }
+    if (collideone(1) || collideone(2)) { x -= dx; y -= dy; }
 }
 
 void Ship::act() {
-	move();
-	bump();
+    move();
+    bump();
 }
 
 /*void Ship::leavefac() {
-	if (up) {
-		act = defact;
-		act();
-	}
+    if (up) {
+        act = defact;
+        act();
+    }
 }*/
