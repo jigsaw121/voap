@@ -44,8 +44,10 @@ class Factory(Interactive):
 		cap(&index, options.length);
 	}
 
-
-enum types {SHIP_TYPE=1, WEAPON_TYPE, MINERAL_TYPE};
+// might be set as bits for better searching
+// "fifth bit set" (finds inherited types too)
+// "is exactly the number 18" (finds a specific object type)
+enum types {SHIP_TYPE=1, MODULE_TYPE, WEAPON_TYPE, MINERAL_TYPE};
 
 class Interactive {
 	public:
@@ -100,12 +102,61 @@ class Interactive {
 			// but it can't be automatically implemented since sometimes temporary deactivation is useful
 			gm.remove(this);
 		}
+		
+		virtual bool collide();
+		std::vector<Interactive*> find(int ftype);
+		std::vector<Interactive*> mergevectors(std::vector<Interactive*> a, std::vector<Interactive*> b);
+		std::vector<Interactive*> Interactive::collidetype(int type);
+		std::vector<Interactive*> Interactive::collidetypes(std::vector<int> types);
 }
 
 bool Interactive::collide(Interactive* obj) {
-	return /* AABB */;
 	// optimizations in searching for types
+	return !( (y+w < obj->y) ||
+			  (y > obj->y+obj->w) ||
+			  (x > obj->x+obj->w) ||
+			  (x+w < obj->x) );
 }
+std::vector<Interactive*> Interactive::find(int ftype) {
+	std::vector<Interactive*> out;
+	
+	// sort gm's objects so all objects of the same type are next to each other
+	// (jump straight to where the wanted type is, cancel on first that isn't of the same type)
+	int i; Interactive* obj;
+	for (i=0; i<gm.objects.size(); i++) {
+		obj = gm.objects.at(i);
+		if (obj->type != ftype) continue;
+		if (abs(obj->x-x)>obj->w+w || abs(obj->y-y)>obj->h+h) continue;
+		out.push_back(obj);
+	}
+	
+	return out;
+}
+std::vector<Interactive*> mergevectors(std::vector<Interactive*> a, std::vector<Interactive*> b) {
+	std::vector<Interactive*> out;
+	out.reserve(a.size() + b.size()); 
+	out.insert(out.end(), a.begin(), a.end());
+	out.insert(out.end(), b.begin(), b.end());
+	return out;
+}
+std::vector<Interactive*> Interactive::collidetype(int type) {
+	int i=0; Interactive* obj;
+	std::vector<Interactive*> found = find(types.at(i));
+	while (i<found.size()) {
+		obj = found.at(i);
+		if (!collide(obj)) found.erase(i);
+		else i++;
+	}
+	return found;
+}
+std::vector<Interactive*> Interactive::collidetypes(std::vector<int> types) {
+	int i; std::vector<Interactive*> colls;
+	for (i=0; i<types.size(); i++) {
+		colls = mergevectors(colls, collidetype(types.at(i)));
+	}
+	return colls;
+}
+
 bool WallAmbassador::collide(Interactive* obj) {
     // for objects with x,y,w,h
     int x, y;
@@ -162,12 +213,12 @@ class Ship: public MovingObj {
 		double turn;
 		
 		explicit Ship(): MovingObj() {
-			turn = 0.4;
 		}
 		virtual void specs() {
 			speed=1.0;
 			slow=0.1;
 			grav=0.1;
+			turn=0.4;
 		}
 		virtual void init() {
 			types stype;
@@ -182,9 +233,19 @@ class Ship: public MovingObj {
 		virtual void bump();
 }
 
+double rad(double n) {
+	return n*180/3.14159;
+}
+
 void Ship::move() {
-	if (lkey) angle -= turn;
-	if (rkey) angle += turn;
+	if (lkey) {
+		angle -= turn;
+		spr.Rotate(rad(turn));
+	}
+	if (rkey) {
+		angle += turn;
+		spr.Rotate(-rad(turn));
+	}
 	
 	if (fwdkey) {
 		dx += cos(angle)*speed; dy += sin(angle)*speed;
@@ -383,7 +444,7 @@ void Flamer::shoot() {
 
 class Rocket: public Explosive() {
 	public:
-		explicit Rocket(): Explosive() {}
+		explicit Rocket(State* _gm, double _x, double _y): Explosive(_gm, _x, _y) {}
 }
 void Rocket::move() {
 	// behaviour: slow down at the start, then accelerate
@@ -416,7 +477,9 @@ Weapon* Weapon::register_fac() {
 
 class Explosive: public MovingObj() {
 	public:
-		explicit Explosive(): MovingObj() {}
+		// typically detonated on host death
+		Ship* host;
+		explicit Explosive(State* _gm, double _x, double _y, Ship* _host): MovingObj(_gm,_x,_y) { host = _host; }
 		void explode() {
 			remove();
 			// a boom gets centered in that position though
@@ -431,10 +494,11 @@ void Explosive::bump() {
 }
 class Bomb: public Explosive() {
 	public:
-		explicit Bomb(): Explosive() {
+		explicit Bomb(State* _gm, double _x, double _y, Ship* _host): Explosive(_gm,_x,_y,_host) {
 			// gets an initial push from the dropping ship
 			// so even dy might be negative at the start
 			// a grenade would be just a bomb with a stronger initial push, heh
+			dx = host->dx/2.0; dy = host->dy/2.0;
 		}
 		virtual void move();
 }
@@ -511,14 +575,19 @@ void State::add2() {
 
 class State {
 	public:
+		int exitflag = 0;
+		sf::Clock clock;
 		std::vector<Interactive*> objects;
 		std::vector<Interactive*> introbuffer;
 		std::vector<Interactive*> erasebuffer;
+
+		explicit State() { /*clock.start();*/ }
+
 		void add(Interactive*);
 		void add2();
 		void remove(Interactive*);
 		void remove2();
-		virtual void mainloop();
+		virtual bool mainloop();
 }
 State::add(Interactive* obj) {
 	introbuffer.push_back(obj);
@@ -532,7 +601,6 @@ class GM: public State {
 	// when esc is pressed whenever you're here, it drops back into the menu
 	// probably adds some listener object that can do anims for that etc.
 	public:
-		int exitflag = 0;
 		explicit GM(): State() {}
 		virtual bool mainloop();
 }
@@ -547,22 +615,27 @@ void Layer::camerafollow() {
 	offset_y = (follow.y + offset_y)/2;
 }
 
+int State::mstime() {
+	sf::Time elapse = clock.getElapsedTime();
+	return elapse.asMilliseconds();
+}
+
 bool GM::mainloop() {
 	if (exitflag) return false;
 
-	int s = mstime(); double frame = 1000/60.0; 
+	int st = mstime(); double frame = 1000/60.0; 
 	
 	if (lag<0) lag=0;
 	double _lag = lag;
 	// warn/abort/skip drawing if lag gets too high
 	int i;
 	//for (i=objects.begin(); i<objects.end(); i++) objects[i]->move();
-	for (i=objects.begin(); i<objects.end(); i++) objects[i]->act();
+	for (i=0; i<objects.size(); i++) objects.at(i)->act();
 	// if drawing is taking too long (lag piled up from a couple of frames),
 	// might just skip a frame
 	if (lag<frame*3) {	
-		for (i=objects.begin(); i<objects.end(); i++) {
-			objects[i]->draw();
+		for (i=0; i<objects.size(); i++) {
+			objects.at(i)->draw();
 		}
 	}
 	
@@ -571,11 +644,11 @@ bool GM::mainloop() {
 
 	// how much we're lagging from the desired fps
 	// if negative (=we're ahead), gets fixed when setting _lag next frame
-	lag += mstime()-s - frame;
+	lag += mstime()-st - frame;
 	
 	// if we're ahead, let's just wait
 	// note that _lag is at least 0
-	while (mstime()-s < frame-_lag)
+	while (mstime()-st < frame-_lag)
 		;
 		
 	return true;
