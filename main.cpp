@@ -1,19 +1,19 @@
+#include <SFML/System.hpp>
 #include <iostream>
 #include <vector>
 
-#include "voap.hpp"
+#include "gm.hpp"
 
 int main(void)
 {
-    VoaP* voap = new VoaP();
+    GM* gm = new GM();
 
     // usually called after menus
-    voap->play_init();
-    while (voap->act())
+    while (gm->mainloop())
         ;
-    delete voap;
+    delete gm;
 
     std::cout<<"all gone!\n";
 
     return 0;
-}
+};

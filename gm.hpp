@@ -1,3 +1,5 @@
+#include "state.hpp"
+
 class GM: public State {
 	// game states are a stack, this is the in-game one
 	// when esc is pressed whenever you're here, it drops back into the menu
@@ -5,4 +7,4 @@ class GM: public State {
 	public:
 		explicit GM(): State() {}
 		virtual bool mainloop();
-}
+};
