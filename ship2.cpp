@@ -1,3 +1,7 @@
+double rad(double n) {
+	return n*180/3.14159;
+}
+
 void Ship::move() {
 	if (lkey) {
 		angle -= turn;

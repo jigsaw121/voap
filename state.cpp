@@ -1,31 +1,36 @@
 State::add(Interactive* obj) {
 	introbuffer.push_back(obj);
 }
+void State::add2() {
+	// called every frame, introbuffer.size() can be zero and this is skipped
+	while (introbuffer.size()) {
+		objects.push_back(introbuffer.back());
+		introbuffer.pop_back();
+	}
+}
 State::remove(Interactive* obj) {
 	erasebuffer.push_back(obj);
 }
-void State::add2() {
-	// called every frame, introbuffer.length can be zero and this is skipped
-	while (introbuffer.length) {
-		objects.push_back(introbuffer[0]);
-		introbuffer.pop(0);
-	}
-}
 void State::remove2() {
-	// called every frame, erasebuffer.length can be zero and this is skipped
+	// called every frame, erasebuffer.size() can be zero and this is skipped
 	int i,f;
 	//for (i=erasebuffer.begin(),i<erasebuffer.end(),i++) {
-	while (erasebuffer.length) {
+	while (erasebuffer.size()) {
 		// or last element for faster removes
 		// assume it's not there several times
-		f = objects.find(erasebuffer[0]);
+		f = objects.find(erasebuffer.back());
 		if (f == -1) {
 			// wut?
-			erasebuffer.pop(0);
+			erasebuffer.pop_back();
 			continue;
 		}
-		objects.erase(objects.begin()+f,objects.begin()+f+1);
-		delete erasebuffer[0];
-		erasebuffer.pop(0);
+		objects.erase(objects.begin()+f);
+		// not necessarily deleted
+		//delete erasebuffer.back();
+		erasebuffer.pop_back();
 	}
+}
+int State::mstime() {
+	sf::Time elapse = clock.getElapsedTime();
+	return elapse.asMilliseconds();
 }

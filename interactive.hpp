@@ -57,4 +57,5 @@ class Interactive {
 		std::vector<Interactive*> mergevectors(std::vector<Interactive*> a, std::vector<Interactive*> b);
 		std::vector<Interactive*> Interactive::collidetype(int type);
 		std::vector<Interactive*> Interactive::collidetypes(std::vector<int> types);
+		Interactive* Interactive::collideone(int type);
 }

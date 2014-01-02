@@ -12,5 +12,6 @@ class State {
 		void add2();
 		void remove(Interactive*);
 		void remove2();
+		int mstime();
 		virtual bool mainloop();
 }
