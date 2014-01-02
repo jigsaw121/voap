@@ -6,7 +6,9 @@
 
 int main(void)
 {
-    GM* gm = new GM();
+    sf::RenderWindow scr(sf::VideoMode(800,600), "voap");
+
+    GM* gm = new GM(&scr);
 
     // usually called after menus
     while (gm->mainloop())

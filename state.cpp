@@ -1,4 +1,14 @@
-State::add(Interactive* obj) {
+#include "state.hpp"
+
+int State::findintr(std::vector<Interactive*> objs, Interactive* obj) {
+    unsigned int i;
+    for (i=0; i<objs.size(); i++) {
+        if (objs[i]==obj) return i;
+    }
+    return -1;
+}
+
+void State::add(Interactive* obj) {
 	introbuffer.push_back(obj);
 }
 void State::add2() {
@@ -8,7 +18,7 @@ void State::add2() {
 		introbuffer.pop_back();
 	}
 }
-State::remove(Interactive* obj) {
+void State::remove(Interactive* obj) {
 	erasebuffer.push_back(obj);
 }
 void State::remove2() {
@@ -18,7 +28,7 @@ void State::remove2() {
 	while (erasebuffer.size()) {
 		// or last element for faster removes
 		// assume it's not there several times
-		f = objects.find(erasebuffer.back());
+		f = findintr(objects, erasebuffer.back());
 		if (f == -1) {
 			// wut?
 			erasebuffer.pop_back();

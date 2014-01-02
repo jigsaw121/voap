@@ -1,12 +1,14 @@
+#include "wallambassador.hpp"
+
 bool WallAmbassador::collide(Interactive* obj) {
     // for objects with x,y,w,h
     int x, y;
     sf::Color c;
     Layer* l = get_active_layer();
     sf::Vector2<float> pos = l->get_pos();
-	
+
 	if (obj->x < 0 || obj->x+obj->w >= l->w || obj->y < 0 || obj->y+obj->h >= l->h) return true;
-	
+
     for (x=0; x<obj->w; x++) {
         for (y=0; y<obj->h; y++) {
             c = l->spr.GetPixel(o->x+x, o->y+y);

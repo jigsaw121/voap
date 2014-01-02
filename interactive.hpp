@@ -1,3 +1,5 @@
+#ifndef INTERACTIVE_H
+#define INTERACTIVE_H
 #include <SFML/Graphics.hpp>
 #include "state.hpp"
 #include <vector>
@@ -50,22 +52,16 @@ class Interactive {
 		}
 		virtual void move() {}
 		virtual void act() {}
-		virtual void draw() {
-			// really? am I supposed to do it like this?
-			sf::Vector2<float> pos = get_active_layer()->get_pos();
-			spr.setPosition(pos.x+x, pos.y+y);
-			screen().Draw(spr);
-		}
-		virtual void remove() {
-			// dying would also have a consequence of delete this; at gm's remove2()
-			// but it can't be automatically implemented since sometimes temporary deactivation is useful
-			gm->remove(this);
-		}
+		virtual void draw();
+		virtual void remove();
 
-		virtual bool collide();
+        sf::RenderWindow* screen();
+
+		virtual bool collide(Interactive* obj);
 		std::vector<Interactive*> find(int ftype);
 		std::vector<Interactive*> mergevectors(std::vector<Interactive*> a, std::vector<Interactive*> b);
 		std::vector<Interactive*> collidetype(int type);
 		std::vector<Interactive*> collidetypes(std::vector<int> types);
 		Interactive* collideone(int type);
 };
+#endif

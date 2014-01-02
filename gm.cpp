@@ -1,5 +1,9 @@
 #include "gm.hpp"
+#include "ship2.hpp"
 
+GM::GM(sf::RenderWindow* _scr): State(_scr) {
+    add(new Ship(this,0,0));
+}
 bool GM::mainloop() {
 	if (exitflag) return false;
 
@@ -8,7 +12,7 @@ bool GM::mainloop() {
 	if (lag<0) lag=0;
 	double _lag = lag;
 	// warn/abort/skip drawing if lag gets too high
-	int i;
+	unsigned int i;
 	//for (i=objects.begin(); i<objects.end(); i++) objects[i]->move();
 	for (i=0; i<objects.size(); i++) objects.at(i)->act();
 	// if drawing is taking too long (lag piled up from a couple of frames),
