@@ -23,7 +23,7 @@ void State::remove(Interactive* obj) {
 }
 void State::remove2() {
     // called every frame, erasebuffer.size() can be zero and this is skipped
-    int i,f;
+    int f;
     //for (i=erasebuffer.begin(),i<erasebuffer.end(),i++) {
     while (erasebuffer.size()) {
         // or last element for faster removes
@@ -41,6 +41,7 @@ void State::remove2() {
     }
 }
 int State::mstime() {
-    sf::Time elapse = clock.getElapsedTime();
-    return elapse.asMilliseconds();
+    return 0;
+    //sf::Time elapse = clock.getElapsedTime();
+    //return elapse.asMilliseconds();
 }

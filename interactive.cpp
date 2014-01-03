@@ -22,7 +22,7 @@ std::vector<Interactive*> Interactive::find(int ftype) {
 
     return out;
 }
-std::vector<Interactive*> mergevectors(std::vector<Interactive*> a, std::vector<Interactive*> b) {
+std::vector<Interactive*> Interactive::mergevectors(std::vector<Interactive*> a, std::vector<Interactive*> b) {
     std::vector<Interactive*> out;
     out.reserve(a.size()+b.size());
     out.insert(out.end(), a.begin(), a.end());
@@ -67,6 +67,6 @@ sf::RenderWindow* Interactive::screen() {
 void Interactive::draw() {
     // really? am I supposed to do it like this?
     //sf::Vector2<float> pos = get_active_layer()->get_pos();
-    spr.setPosition(/*pos.x+*/x, /*pos.y+*/y);
-    screen()->draw(spr);
+    //spr.SetPosition(/*pos.x+*/x, /*pos.y+*/y);
+    //screen()->Draw(spr);
 }

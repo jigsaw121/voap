@@ -1,6 +1,7 @@
 #include "wallambassador.hpp"
 
 bool WallAmbassador::collide(Interactive* obj) {
+    /*
     // for objects with x,y,w,h
     int x, y;
     sf::Color c;
@@ -21,5 +22,7 @@ bool WallAmbassador::collide(Interactive* obj) {
             }
         }
     }
+    return false;
+    */
     return false;
 }

@@ -4,13 +4,12 @@
 #include <SFML/System.hpp>
 #include "interactive.hpp"
 #include <vector>
-
 class Interactive;
 
 class State {
     public:
         int exitflag, lag;
-        sf::Clock clock;
+        //sf::Clock clock;
         sf::RenderWindow* scr;
         std::vector<Interactive*> objects;
         std::vector<Interactive*> introbuffer;
@@ -21,6 +20,7 @@ class State {
             scr = _scr;
             /*clock.start();*/
         }
+        ~State() {};
 
         int findintr(std::vector<Interactive*> objs, Interactive* obj);
 
@@ -29,7 +29,7 @@ class State {
         void remove(Interactive*);
         void remove2();
         int mstime();
-        virtual bool mainloop();
+        virtual bool mainloop() { return false; }
 };
 
 #endif
