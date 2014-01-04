@@ -1,5 +1,6 @@
 #include "ship2.hpp"
 #include "math.h"
+#include <iostream>
 //#include <SFML/Keyboard.hpp>
 
 double rad(double n) {
@@ -13,24 +14,30 @@ void Ship::set_keys() {
     backkey = sf::Keyboard::Down;
 }
 void Ship::move() {
-    if (lkey) {
+    if (sf::Keyboard::isKeyPressed(lkey)) {
         angle -= turn;
-        spr.rotate(rad(turn));
     }
-    if (rkey) {
+    if (sf::Keyboard::isKeyPressed(rkey)) {
         angle += turn;
-        spr.rotate(-rad(turn));
     }
+    spr.setRotation(rad(angle));
 
-    if (fwdkey) {
+    if (sf::Keyboard::isKeyPressed(fwdkey)) {
         dx += cos(angle)*speed; dy += sin(angle)*speed;
     }
-    if (backkey) {
+    if (sf::Keyboard::isKeyPressed(backkey)) {
         dx /= slow*2; dy /= slow*2;
     }
 
-    dx /= slow; dy /= slow;
+    /*dx /= slow;*/ dy /= slow;
     dy += grav;
+
+    cap(&dx, -24, 24);
+    cap(&dy, -24, 24);
+
+    if (dx||dy) {
+        std::cout<<dx<<" "<<dy<<" "<<turn<<" "<<angle<<"\n";
+    }
 
     x += dx; y += dy;
 }
@@ -41,7 +48,7 @@ void Ship::bump() {
 
 void Ship::act() {
     move();
-    bump();
+    //bump();
 }
 
 /*void Ship::leavefac() {

@@ -7,16 +7,17 @@ class Ship: public MovingObj {
     public:
         Module* m1; Module* m2;
         double turn;
-        int lkey,rkey,fwdkey,backkey;
+        sf::Keyboard::Key lkey,rkey,fwdkey,backkey;
 
         explicit Ship(State* _gm, double _x, double _y): MovingObj(_gm,x,y) {
             set_keys();
+            specs();
         }
         virtual void specs() {
             speed=1.0;
-            slow=0.1;
-            grav=0.1;
-            turn=0.4;
+            slow=1.02;
+            grav=0.2;
+            turn=0.2;
         }
         virtual void init() {
             //types stype;

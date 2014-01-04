@@ -1,5 +1,6 @@
 #ifndef GM_HPP
 #define GM_HPP
+#include "layer2.hpp"
 #include "state.hpp"
 #include "ship2.hpp"
 
@@ -10,6 +11,7 @@ class GM: public State {
     public:
         explicit GM(sf::RenderWindow* _scr): State(_scr) {
             add(new Ship(this,0,0));
+            add(new BGLayer(this,0,0));
         }
         //~GM() {}
         virtual bool mainloop();

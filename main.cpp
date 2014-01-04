@@ -1,4 +1,4 @@
-#include <SFML/System.hpp>
+#include <SFML/Window.hpp>
 #include <iostream>
 #include <vector>
 
@@ -6,7 +6,9 @@
 
 int main(void)
 {
-    sf::RenderWindow scr(sf::VideoMode(800,600), "voap");
+    std::cout<<"zz\n";
+    sf::RenderWindow scr;
+    scr.create(sf::VideoMode(640,400,32), "voap");
 
     GM* gm = new GM(&scr);
 

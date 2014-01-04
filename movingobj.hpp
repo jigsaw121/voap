@@ -12,7 +12,7 @@ class MovingObj: public Interactive {
         }
         virtual void specs() {
             speed=1.0;
-            slow=0.1;
+            slow=1.1;
             grav=0.1;
         }
         virtual void move() {}

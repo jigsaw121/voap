@@ -41,7 +41,6 @@ void State::remove2() {
     }
 }
 int State::mstime() {
-    return 0;
-    //sf::Time elapse = clock.getElapsedTime();
-    //return elapse.asMilliseconds();
+    sf::Time elapse = clock.getElapsedTime();
+    return elapse.asMilliseconds();
 }

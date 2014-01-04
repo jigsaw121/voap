@@ -15,7 +15,7 @@ class Interactive {
         sf::Sprite spr;
 
         explicit Interactive(State* _gm, double _x, double _y) {
-            //initall(_gm,_x,_y);
+            initall(_gm,_x,_y);
         }
         ~Interactive() {
             //delete img;
@@ -34,17 +34,21 @@ class Interactive {
         virtual void dimsinit() { w = 24; h = 24; }
         virtual void typeinit() { type = 0; }
         virtual void imginit() {
-            /*sf::Texture texture;
+            sf::Texture texture;
             texture.create(w,h);
             sf::Image image;
             image.create(w, h, sf::Color(128, 128, 128, 255));
             texture.update(image);
             //img.setSmooth(false);
             spr.setTexture(texture);
-            spr.setOrigin(0.5, 0.5);*/
+            spr.setOrigin(0.5, 0.5);
         }
 
         void skip() {}
+        void cap(double* n, double low, double hi) {
+            if (*n<low) *n=low;
+            else if (*n>hi) *n=hi;
+        }
 
         virtual Interactive* spawn() {
             return new Interactive(gm,x,y);

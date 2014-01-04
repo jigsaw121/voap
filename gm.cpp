@@ -8,7 +8,7 @@
 bool GM::mainloop() {
     if (exitflag || !scr) return false;
 
-    int st = mstime(); double frame = 1000/2.0;
+    int st = mstime(); double frame = 1000/20.0;
 
     if (lag<0) lag=0;
     double _lag = lag;
@@ -16,14 +16,19 @@ bool GM::mainloop() {
     unsigned int i;
     //for (i=objects.begin(); i<objects.end(); i++) objects[i]->move();
 
-    /*sf::Event event;
+    sf::Event event;
     while (scr->pollEvent(event))
     {
-        if (event.Type == sf::Event::Closed)
-            scr->Close();
+        if (event.type == sf::Event::Closed) {
+            scr->close();
+            return false;
+        }
     }
 
-    scr->Clear(sf::Color::Black);*/
+    /*scr->clear(sf::Color::Black);
+    sf::CircleShape shape(100.f);
+    shape.setFillColor(sf::Color::Green);
+    scr->draw(shape);*/
 
     for (i=0; i<objects.size(); i++) objects.at(i)->act();
     // if drawing is taking too long (lag piled up from a couple of frames),
@@ -37,7 +42,7 @@ bool GM::mainloop() {
     // actually remove/add from buffers
     remove2(); add2();
 
-    /*scr->Display();*/
+    scr->display();
 
     // how much we're lagging from the desired fps
     // if negative (=we're ahead), gets fixed when setting _lag next frame
@@ -45,6 +50,7 @@ bool GM::mainloop() {
 
     // if we're ahead, let's just wait
     // note that _lag is at least 0
+    std::cout<<"Target "<<frame<<", ref "<<lag<<"\n";
     while (mstime()-st < frame-_lag)
         ;
 
