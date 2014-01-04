@@ -9,9 +9,9 @@ class Ship: public MovingObj {
         double turn;
         sf::Keyboard::Key lkey,rkey,fwdkey,backkey;
 
-        explicit Ship(State* _gm, double _x, double _y): MovingObj(_gm,x,y) {
+        explicit Ship(/*State* _gm, double _x, double _y*/): MovingObj(/*_gm,x,y*/) {
             set_keys();
-            specs();
+            //specs();
         }
         virtual void specs() {
             speed=1.0;
@@ -25,10 +25,10 @@ class Ship: public MovingObj {
             type = 2;
         }
         virtual Interactive* spawn() {
-            return new Ship(gm,x,y);
+            return new Ship(/*gm,x,y*/);
         }
+        void set_keys();
         virtual void move();
-        virtual void set_keys();
         virtual void act();
         virtual void bump();
 

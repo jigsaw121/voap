@@ -7,7 +7,7 @@ class WallAmbassador: public Interactive {
     // an inherited version could destroy the walls on collision too
     // quadtrees and shiz whenever needed, even a couple of huge layers run smoothly right now
     public:
-        explicit WallAmbassador(State* _gm, double _x, double _y): Interactive(_gm,_x,_y) {}
+        explicit WallAmbassador(/*State* _gm, double _x, double _y*/): Interactive(/*_gm,_x,_y*/) {}
         virtual void init() {
             //types stype;
             //stype = SHIP_TYPE;

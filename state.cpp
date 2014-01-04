@@ -8,8 +8,9 @@ int State::findintr(std::vector<Interactive*> objs, Interactive* obj) {
     return -1;
 }
 
-void State::add(Interactive* obj) {
+Interactive* State::add(Interactive* obj) {
     introbuffer.push_back(obj);
+	return obj;
 }
 void State::add2() {
     // called every frame, introbuffer.size() can be zero and this is skipped

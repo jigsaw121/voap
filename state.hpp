@@ -26,7 +26,7 @@ class State {
 
         int findintr(std::vector<Interactive*> objs, Interactive* obj);
 
-        void add(Interactive*);
+        Interactive* add(Interactive*);
         void add2();
         void remove(Interactive*);
         void remove2();

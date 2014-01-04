@@ -10,7 +10,7 @@ class Module: public MovingObj {
     public:
         Ship* host;
 
-        explicit Module(State* _gm, double _x, double _y, Ship* _host): MovingObj(_gm,_x,_y) { host = _host; }
+        explicit Module(/*State* _gm, double _x, double _y,*/ Ship* _host): MovingObj(/*_gm,_x,_y*/) { host = _host; }
         virtual void move();
         // when a ship dies it calls this
         virtual void die_consequence() {}

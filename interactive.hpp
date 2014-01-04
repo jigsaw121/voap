@@ -14,8 +14,8 @@ class Interactive {
 
         sf::Sprite spr;
 
-        explicit Interactive(State* _gm, double _x, double _y) {
-            initall(_gm,_x,_y);
+        explicit Interactive(/*State* _gm, double _x, double _y*/) {
+            /*initall(_gm,_x,_y);*/
         }
         ~Interactive() {
             //delete img;
@@ -28,7 +28,10 @@ class Interactive {
             shareinit(_x,_y);
             typeinit();
             imginit();
+			specinit();
         }
+		virtual void specinit() {
+		}
         virtual void shareinit(double _x, double _y) { x = _x; y = _y; }
         // default-y values for the rest of the init functions
         virtual void dimsinit() { w = 24; h = 24; }
@@ -51,7 +54,7 @@ class Interactive {
         }
 
         virtual Interactive* spawn() {
-            return new Interactive(gm,x,y);
+            return new Interactive(/*gm,x,y*/);
         }
         virtual void move() {}
         virtual void act() {}

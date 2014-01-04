@@ -10,8 +10,10 @@ class GM: public State {
     // probably adds some listener object that can do anims for that etc.
     public:
         explicit GM(sf::RenderWindow* _scr): State(_scr) {
-            add(new Ship(this,0,0));
-            add(new BGLayer(this,0,0));
+			// just gotta remember to call initall every time it's needed
+			// and if things change, to call a different one
+            add(new Ship())->initall(this,0,0);
+            add(new BGLayer())->initall(this,0,0);
         }
         //~GM() {}
         virtual bool mainloop();
