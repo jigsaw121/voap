@@ -1,3 +1,5 @@
+#include "interactive.hpp"
+#include "layer2.hpp"
 #include "state.hpp"
 
 int State::findintr(std::vector<Interactive*> objs, Interactive* obj) {
@@ -10,6 +12,10 @@ int State::findintr(std::vector<Interactive*> objs, Interactive* obj) {
 
 Interactive* State::add(Interactive* obj) {
     introbuffer.push_back(obj);
+	return obj;
+}
+Layer* State::lradd(Layer* obj) {
+    introbuffer.push_back(static_cast<Interactive*>(obj));
 	return obj;
 }
 Interactive* State::prev() {
@@ -42,7 +48,7 @@ void State::remove2() {
         }
         objects.erase(objects.begin()+f);
         // not necessarily deleted
-        if (erasebuffer.back().dying) delete erasebuffer.back();
+        if (erasebuffer.back()->dying) delete erasebuffer.back();
         erasebuffer.pop_back();
     }
 }

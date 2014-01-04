@@ -4,8 +4,6 @@
 #include "state.hpp"
 #include <vector>
 
-class State;
-
 class Interactive {
     public:
         State* gm;
@@ -14,6 +12,7 @@ class Interactive {
         int type;
 
         sf::Sprite spr;
+        sf::Texture texture;
 
         explicit Interactive(/*State* _gm, double _x, double _y*/) {
             /*initall(_gm,_x,_y);*/
@@ -38,7 +37,6 @@ class Interactive {
         virtual void dimsinit() { w = 24; h = 24; }
         virtual void typeinit() { type = 0; }
         virtual void imginit() {
-            sf::Texture texture;
             texture.create(w,h);
             sf::Image image;
             image.create(w, h, sf::Color(128, 128, 128, 255));
@@ -54,9 +52,7 @@ class Interactive {
             else if (*n>hi) *n=hi;
         }
 
-        virtual void spawn() {
-            gm->add(new Interactive(/*gm,x,y*/))->initall(gm,x,y);
-        }
+        virtual void spawn();
         virtual void move() {}
         virtual void act() {}
         virtual void draw();
@@ -71,7 +67,7 @@ class Interactive {
         std::vector<Interactive*> collidetype(int type);
         std::vector<Interactive*> collidetypes(std::vector<int> types);
         Interactive* collideone(int type);
-		
-		Layer* get_active_layer() { return gm->aclayer; }
+
+		Layer* get_active_layer();
 };
 #endif

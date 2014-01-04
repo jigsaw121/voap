@@ -35,15 +35,19 @@ void Ship::move() {
     cap(&dx, -24, 24);
     cap(&dy, -24, 24);
 
-    if (dx||dy) {
+    /*if (dx||dy) {
         std::cout<<dx<<" "<<dy<<" "<<turn<<" "<<angle<<"\n";
-    }
+    }*/
 
     x += dx; y += dy;
 }
 
 void Ship::bump() {
-    if (collideone(1) || collideone(2)) { x -= dx; y -= dy; }
+    if (collideone(1) || collideone(2)) {
+        x -= dx; y -= dy;
+        dx/=1.1; dy/=1.1;
+        // probably damage too
+    }
 }
 
 void Ship::act() {

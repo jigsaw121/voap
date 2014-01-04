@@ -2,11 +2,12 @@
 #define STATE_H
 
 #include <SFML/Graphics.hpp>
-#include "interactive.hpp"
+//#include "interactive.hpp"
+class Interactive;
+class Layer;
+//#include "layer2.hpp"
 #include <vector>
 #include <iostream>
-
-class Interactive;
 
 class State {
     public:
@@ -28,6 +29,7 @@ class State {
         int findintr(std::vector<Interactive*> objs, Interactive* obj);
 
         Interactive* prev();
+        Layer* lradd(Layer*);
         Interactive* add(Interactive*);
         void add2();
         void remove(Interactive*);

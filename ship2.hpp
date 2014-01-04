@@ -14,10 +14,10 @@ class Ship: public MovingObj {
             //specs();
         }
 		virtual void specs() {
-			speed=1.0;
+			speed=0.3;
             slow=1.02;
-            grav=0.2;
-            turn=0.2;
+            grav=0.1;
+            turn=3.14159/45.0;
 			set_keys();
         }
         virtual void init() {

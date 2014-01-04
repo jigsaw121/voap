@@ -8,7 +8,7 @@ int main(void)
 {
     std::cout<<"zz\n";
     sf::RenderWindow scr;
-    scr.create(sf::VideoMode(640,400,32), "voap");
+    scr.create(sf::VideoMode(640,480,32), "voap");
 
     GM* gm = new GM(&scr);
 

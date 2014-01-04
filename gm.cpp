@@ -5,15 +5,16 @@
 GM::GM(sf::RenderWindow* _scr): State(_scr) {
 	// just gotta remember to call initall every time it's needed
 	// and if things change, to call a different one
-	add(new BGLayer())->initall(this,0,0);
-	aclayer = add(new Layer()); aclayer->initall(this,0,0);
-	add(new Ship())->initall(this,0,0);
-	aclayer->start_camerafollow(prev());
+	Interactive* intr = add(new Ship());
+	intr->initall(this,0,0);
+	aclayer = lradd(new Layer("aurpilkutyryry.png")); aclayer->initall(this,0,0);
+	aclayer->start_camerafollow(intr);
+    lradd(new BGLayer())->initall(this,0,0);
 }
 bool GM::mainloop() {
     if (exitflag || !scr) return false;
 
-    int st = mstime(); double frame = 1000/20.0;
+    int st = mstime(); double frame = 1000/60.0;
 
     if (lag<0) lag=0;
     double _lag = lag;
@@ -30,12 +31,12 @@ bool GM::mainloop() {
         }
     }
 
-    for (i=0; i<objects.size(); i++) objects.at(i)->act();
+    for (i=0; i<objects.size(); i++) objects[i]->act();
     // if drawing is taking too long (lag piled up from a couple of frames),
     // might just skip a frame
     if (lag<frame*3) {
         for (i=0; i<objects.size(); i++) {
-            objects.at(i)->draw();
+            objects[i]->draw();
         }
     }
 
@@ -47,10 +48,10 @@ bool GM::mainloop() {
     // how much we're lagging from the desired fps
     // if negative (=we're ahead), gets fixed when setting _lag next frame
     lag += mstime()-st - frame;
+    std::cout<<"Target "<<frame<<", ref "<<lag<<"\n";
 
     // if we're ahead, let's just wait
     // note that _lag is at least 0
-    std::cout<<"Target "<<frame<<", ref "<<lag<<"\n";
     while (mstime()-st < frame-_lag)
         ;
 

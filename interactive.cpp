@@ -1,4 +1,6 @@
 #include "interactive.hpp"
+#include "layer2.hpp"
+#include <iostream>
 
 bool Interactive::collide(Interactive* obj) {
     // optimizations in searching for types
@@ -74,5 +76,12 @@ void Interactive::draw() {
     // really? am I supposed to do it like this?
     sf::Vector2<float> pos = get_active_layer()->offset();
     spr.setPosition(pos.x+x, pos.y+y);
+    //std::cout<<"I'm drawn at "<<pos.x+x<<", "<<pos.y+y<<"\n";
     screen()->draw(spr);
+}
+void Interactive::spawn() {
+    gm->add(new Interactive(/*gm,x,y*/))->initall(gm,x,y);
+}
+Layer* Interactive::get_active_layer() {
+    return gm->aclayer;
 }
