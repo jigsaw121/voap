@@ -61,6 +61,12 @@ void Interactive::remove() {
     // but it can't be automatically implemented since sometimes temporary deactivation is useful
     gm->remove(this);
 }
+void Interactive::die() {
+    // oh look a boolean
+	// crude but it works I guess
+    remove();
+	dying = true;
+}
 sf::RenderWindow* Interactive::screen() {
     return gm->scr;
 }

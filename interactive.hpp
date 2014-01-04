@@ -10,6 +10,7 @@ class Interactive {
     public:
         State* gm;
         double x,y,w,h;
+        bool dying;
         int type;
 
         sf::Sprite spr;
@@ -24,6 +25,7 @@ class Interactive {
         virtual void initall(State* _gm, double _x, double _y) {
             // in case there's ever some weird behaviour
             gm = _gm;
+			dying = false;
             dimsinit();
             shareinit(_x,_y);
             typeinit();
@@ -53,13 +55,14 @@ class Interactive {
             else if (*n>hi) *n=hi;
         }
 
-        virtual Interactive* spawn() {
-            return new Interactive(/*gm,x,y*/);
+        virtual void spawn() {
+            gm->add(new Interactive(/*gm,x,y*/))->initall(gm,x,y);
         }
         virtual void move() {}
         virtual void act() {}
         virtual void draw();
         virtual void remove();
+        virtual void die();
 
         sf::RenderWindow* screen();
 

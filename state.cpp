@@ -37,7 +37,7 @@ void State::remove2() {
         }
         objects.erase(objects.begin()+f);
         // not necessarily deleted
-        //delete erasebuffer.back();
+        if (erasebuffer.back().dying) delete erasebuffer.back();
         erasebuffer.pop_back();
     }
 }
