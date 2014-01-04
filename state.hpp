@@ -13,6 +13,7 @@ class State {
         int exitflag, lag;
         sf::Clock clock;
         sf::RenderWindow* scr;
+        Layer* aclayer;
         std::vector<Interactive*> objects;
         std::vector<Interactive*> introbuffer;
         std::vector<Interactive*> erasebuffer;
@@ -26,6 +27,7 @@ class State {
 
         int findintr(std::vector<Interactive*> objs, Interactive* obj);
 
+        Interactive* prev();
         Interactive* add(Interactive*);
         void add2();
         void remove(Interactive*);

@@ -2,9 +2,14 @@
 #include "ship2.hpp"
 #include <iostream>
 
-/*GM::GM(sf::RenderWindow* _scr): State(_scr) {
-    add(new Ship(this,0,0));
-}*/
+GM::GM(sf::RenderWindow* _scr): State(_scr) {
+	// just gotta remember to call initall every time it's needed
+	// and if things change, to call a different one
+	add(new BGLayer())->initall(this,0,0);
+	aclayer = add(new Layer()); aclayer->initall(this,0,0);
+	add(new Ship())->initall(this,0,0);
+	aclayer->start_camerafollow(prev());
+}
 bool GM::mainloop() {
     if (exitflag || !scr) return false;
 
@@ -24,11 +29,6 @@ bool GM::mainloop() {
             return false;
         }
     }
-
-    /*scr->clear(sf::Color::Black);
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
-    scr->draw(shape);*/
 
     for (i=0; i<objects.size(); i++) objects.at(i)->act();
     // if drawing is taking too long (lag piled up from a couple of frames),

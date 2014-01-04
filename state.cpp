@@ -12,6 +12,11 @@ Interactive* State::add(Interactive* obj) {
     introbuffer.push_back(obj);
 	return obj;
 }
+Interactive* State::prev() {
+	// for quick references on inits
+	// inits are messy enough already, give them a break
+    return introbuffer.back();
+}
 void State::add2() {
     // called every frame, introbuffer.size() can be zero and this is skipped
     while (introbuffer.size()) {

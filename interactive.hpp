@@ -32,8 +32,7 @@ class Interactive {
             imginit();
 			specinit();
         }
-		virtual void specinit() {
-		}
+		virtual void specinit() {}
         virtual void shareinit(double _x, double _y) { x = _x; y = _y; }
         // default-y values for the rest of the init functions
         virtual void dimsinit() { w = 24; h = 24; }
@@ -46,7 +45,7 @@ class Interactive {
             texture.update(image);
             //img.setSmooth(false);
             spr.setTexture(texture);
-            spr.setOrigin(0.5, 0.5);
+            //spr.setOrigin(0.5, 0.5);
         }
 
         void skip() {}
@@ -72,5 +71,7 @@ class Interactive {
         std::vector<Interactive*> collidetype(int type);
         std::vector<Interactive*> collidetypes(std::vector<int> types);
         Interactive* collideone(int type);
+		
+		Layer* get_active_layer() { return gm->aclayer; }
 };
 #endif

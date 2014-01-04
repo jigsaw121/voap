@@ -72,7 +72,7 @@ sf::RenderWindow* Interactive::screen() {
 }
 void Interactive::draw() {
     // really? am I supposed to do it like this?
-    //sf::Vector2<float> pos = get_active_layer()->get_pos();
-    spr.setPosition(/*pos.x+*/x, /*pos.y+*/y);
+    sf::Vector2<float> pos = get_active_layer()->offset();
+    spr.setPosition(pos.x+x, pos.y+y);
     screen()->draw(spr);
 }
