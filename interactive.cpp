@@ -73,8 +73,8 @@ sf::RenderWindow* Interactive::screen() {
     return gm->scr;
 }
 void Interactive::gendraw() {
+    sf::Vector2<float> pos = offset();
     // really? am I supposed to do it like this?
-    sf::Vector2<float> pos = get_active_layer()->offset();
     spr.setPosition(pos.x+x, pos.y+y);
     //std::cout<<"I'm drawn at "<<pos.x+x<<", "<<pos.y+y<<"\n";
     screen()->draw(spr);
@@ -84,4 +84,7 @@ void Interactive::spawn() {
 }
 Layer* Interactive::get_active_layer() {
     return gm->aclayer;
+}
+sf::Vector2<float> Interactive::camera(); { 
+	return gm->camera->offset(); 
 }

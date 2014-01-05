@@ -8,8 +8,15 @@ class Layer: public Interactive {
 	public:
 		Interactive* follow;
 		std::string filename;
+		double parallax;
 
-        explicit Layer(/*State* _gm, double _x, double _y*/std::string _filename): Interactive(/*_gm,_x,_y*/) { filename = _filename; }
+        explicit Layer(std::string _filename="", double _parallax=1.0): Interactive() { filename = _filename; parallax = _parallax; }
+		virtual void typeinit2() { 
+			types.push_back(Typenum::ENGINEER);
+			typeinit3();
+		}
+		virtual void typeinit3() {}
+		
 		virtual void specinit() {
 			start_camerafollow(NULL);
 		}
@@ -18,18 +25,8 @@ class Layer: public Interactive {
             texture.loadFromFile(filename);
             spr.setTexture(texture);
         }
-        virtual void draw() {
-            spr.setPosition(offset());
-            screen()->draw(spr);
-        }
-		sf::Vector2<float> offset() {
-			//sf::Vector2<float> pos = spr.getPosition();
-			// danger - still called if there's no follow
-			sf::Vector2<float> cntr((-x+320)/*+follow.w/2*/, (-y+240)/*+follow.h/2*/);
-			return cntr;
-		}
 		void start_camerafollow(Interactive*);
-		void camerafollow();
+		virtual void camerafollow();
 		virtual void act() {
 			camerafollow();
 			//if (!follow) return;

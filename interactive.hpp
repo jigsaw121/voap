@@ -83,5 +83,6 @@ class Interactive {
         Interactive* collideone(int type);
 
 		Layer* get_active_layer();
+		sf::Vector2<float> offset();
 };
 #endif
