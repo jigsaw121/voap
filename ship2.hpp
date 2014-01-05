@@ -2,6 +2,7 @@
 #define SHIP2_HPP
 #include "movingobj.hpp"
 #include "module.hpp"
+#include "types.hpp"
 
 class Ship: public MovingObj {
     public:
@@ -15,6 +16,12 @@ class Ship: public MovingObj {
             //set_keys();
             //specs();
         }
+		virtual void typeinit3() {
+			types.push_back(Typenum::SHIP);
+			typeinit4();
+		}
+		virtual void typeinit4() {}
+		
 		virtual void specs() {
 			speed=0.3;
             slow=1.02;
@@ -35,6 +42,7 @@ class Ship: public MovingObj {
         virtual void act();
         virtual void bump();
         virtual void mods();
+		void collect();
 
         /*void leavefac();*/
 };

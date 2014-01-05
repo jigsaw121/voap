@@ -72,7 +72,7 @@ void Interactive::die() {
 sf::RenderWindow* Interactive::screen() {
     return gm->scr;
 }
-void Interactive::draw() {
+void Interactive::gendraw() {
     // really? am I supposed to do it like this?
     sf::Vector2<float> pos = get_active_layer()->offset();
     spr.setPosition(pos.x+x, pos.y+y);

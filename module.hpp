@@ -15,5 +15,18 @@ class Module: public MovingObj {
         virtual void die_consequence() {}
         
 		virtual void use() {}; 
-        virtual void swap(Ship* s); 
+        virtual void swap(Ship* s);
+		virtual void act() {}
+		virtual void draw() {
+			// only drawn as a module image if not wielded/cargoed
+			if (host==NULL) gendraw();
+		}
+		
+		virtual void set_host(Ship*);
+		virtual void collectme(Ship*);
 };
+class Weapon: public Module() {
+	public:
+		int cooldown;
+		explicit Weapon(): Module() { cooldown=0; }
+}

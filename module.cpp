@@ -11,3 +11,16 @@ void Module::swap(Ship* s) {
 	}
 	// otherwise nothing needs to be done
 }
+
+void Module::set_host(Ship* s) {
+	// drawing, collections should cease when host is set
+	// no need to check if there's already a host because the logic already prevents that
+	host = s;
+	s->cargo.push_back(this);
+}
+
+void Module::collectme(Ship* s) {
+	if (host!=NULL) return;
+	
+	set_host(Ship* s);
+}

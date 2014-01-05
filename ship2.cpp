@@ -63,6 +63,13 @@ void Ship::mods() {
 	if (sf::Keyboard::isKeyPressed(ckey)) modi.swap(this);
 }
 
+void Ship::collect() {
+	//Module m* = static_cast<Module>(collideone(MODULE_TYPE));
+	Interactive* intr = collideone(MODULE_TYPE);
+	// only implemented for module types anyway
+	intr->collectme(this);
+}
+
 /*void Ship::leavefac() {
     if (up) {
         act = defact;

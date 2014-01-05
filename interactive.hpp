@@ -3,13 +3,14 @@
 #include <SFML/Graphics.hpp>
 #include "state.hpp"
 #include <vector>
+#include "types.hpp"
 
 class Interactive {
     public:
         State* gm;
         double x,y,w,h;
         bool dying;
-        int type;
+        std::vector<Typenum::type> types;
 
         sf::Sprite spr;
         sf::Texture texture;
@@ -35,7 +36,14 @@ class Interactive {
         virtual void shareinit(double _x, double _y) { x = _x; y = _y; }
         // default-y values for the rest of the init functions
         virtual void dimsinit() { w = 24; h = 24; }
-        virtual void typeinit() { type = 0; }
+		// could just have a type vector
+		// so you could search for any type, all inheritants, or just one specific type
+		// (even under specific conditions if necessary)
+        virtual void typeinit() { //type = 0; 
+			types.push_back(Typenum::ANY);
+			typeinit2();
+		}
+		virtual void typeinit2() {}
         virtual void imginit() {
             texture.create(w,h);
             sf::Image image;
@@ -55,9 +63,15 @@ class Interactive {
         virtual void spawn();
         virtual void move() {}
         virtual void act() {}
-        virtual void draw();
+		// override for optional draws
+		virtual void gendraw();
+        virtual void draw() { gendraw(); }
         virtual void remove();
         virtual void die();
+		
+		// implemented for modules only
+		virtual void set_host(Ship*) {}
+		virtual void collectme(Ship*) {}
 
         sf::RenderWindow* screen();
 

@@ -62,3 +62,11 @@ class Turret: public MovingObj() {
 //void build(Turret* self);
 //void aim(Turret* self);
 // ei ollukkaan huva tama
+
+class MineLayer: public Module() {
+	// attributes changed depending on ship
+	public:
+		explicit MineLayer(): Module() {}
+		virtual void use();
+		virtual void die_consequence();
+}
