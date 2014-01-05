@@ -9,7 +9,12 @@ int State::findintr(std::vector<Interactive*> objs, Interactive* obj) {
     }
     return -1;
 }
-
+void State::clearall() {
+    // gotta free memory, etc.
+    introbuffer.clear();
+    erasebuffer.clear();
+    objects.clear();
+}
 Interactive* State::add(Interactive* obj) {
     introbuffer.push_back(obj);
 	return obj;

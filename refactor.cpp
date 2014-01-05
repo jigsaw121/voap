@@ -460,7 +460,7 @@ void Rocket::move() {
 class TrailMod: public Module() {
 	// attributes changed depending on ship
 	public:
-		explicit Weapon(): Module() {}
+		explicit TrailMod(): Module() {}
 		virtual void act();
 }
 void TrailMod::act() {

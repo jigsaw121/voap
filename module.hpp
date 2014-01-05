@@ -1,5 +1,4 @@
 #include "movingobj.hpp"
-#include "ship2.hpp"
 
 class Ship;
 
@@ -14,4 +13,7 @@ class Module: public MovingObj {
         virtual void move();
         // when a ship dies it calls this
         virtual void die_consequence() {}
+        
+		virtual void use() {}; 
+        virtual void swap(Ship* s); 
 };

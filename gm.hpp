@@ -11,6 +11,7 @@ class GM: public State {
     public:
         explicit GM(sf::RenderWindow* _scr);
         //~GM() {}
+        virtual void reset();
         virtual bool mainloop();
 };
 #endif

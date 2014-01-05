@@ -5,9 +5,11 @@
 
 class Ship: public MovingObj {
     public:
-        Module* m1; Module* m2;
+        Module* modi; //Module* m2;
         double turn;
-        sf::Keyboard::Key lkey,rkey,fwdkey,backkey;
+        sf::Keyboard::Key lkey,rkey,fwdkey,backkey,skey,ckey;
+		// guess minerals inherit from Module too
+		std::vector<Module*> cargo;
 
         explicit Ship(/*State* _gm, double _x, double _y*/): MovingObj(/*_gm,x,y*/) {
             //set_keys();
@@ -32,6 +34,7 @@ class Ship: public MovingObj {
         virtual void move();
         virtual void act();
         virtual void bump();
+        virtual void mods();
 
         /*void leavefac();*/
 };

@@ -18,7 +18,7 @@ class Interactive {
             /*initall(_gm,_x,_y);*/
         }
         ~Interactive() {
-            //delete img;
+            //delete texture;
             //delete spr;
         }
         virtual void initall(State* _gm, double _x, double _y) {

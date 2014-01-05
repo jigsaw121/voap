@@ -12,6 +12,8 @@ void Ship::set_keys() {
     rkey = sf::Keyboard::Right;
     fwdkey = sf::Keyboard::Up;
     backkey = sf::Keyboard::Down;
+    skey = sf::Keyboard::Z;
+    ckey = sf::Keyboard::X;
 }
 void Ship::move() {
     if (sf::Keyboard::isKeyPressed(lkey)) {
@@ -29,7 +31,7 @@ void Ship::move() {
         dx /= slow*2; dy /= slow*2;
     }
 
-    /*dx /= slow;*/ dy /= slow;
+    /*dx /= slow; dy /= slow;*/
     dy += grav;
 
     cap(&dx, -24, 24);
@@ -52,7 +54,13 @@ void Ship::bump() {
 
 void Ship::act() {
     move();
+	mods();
     //bump();
+}
+
+void Ship::mods() {
+	if (sf::Keyboard::isKeyPressed(skey)) modi.use();
+	if (sf::Keyboard::isKeyPressed(ckey)) modi.swap(this);
 }
 
 /*void Ship::leavefac() {

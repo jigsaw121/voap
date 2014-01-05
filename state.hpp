@@ -28,6 +28,9 @@ class State {
 
         int findintr(std::vector<Interactive*> objs, Interactive* obj);
 
+        virtual void reset() {}
+        void clearall();
+
         Interactive* prev();
         Layer* lradd(Layer*);
         Interactive* add(Interactive*);

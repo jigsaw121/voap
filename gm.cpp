@@ -1,10 +1,18 @@
 #include "gm.hpp"
 #include "ship2.hpp"
 #include <iostream>
+//#include <SFML/Keyboard.hpp>
 
 GM::GM(sf::RenderWindow* _scr): State(_scr) {
-	// just gotta remember to call initall every time it's needed
+	reset();
+}
+void GM::reset() {
+    // just gotta remember to call initall every time it's needed
 	// and if things change, to call a different one
+	// these are pushed in the reverse order... not too intuitive
+	// especially with the prev() references
+	clearall();
+
 	Interactive* intr = add(new Ship());
 	intr->initall(this,0,0);
 	aclayer = lradd(new Layer("aurpilkutyryry.png")); aclayer->initall(this,0,0);
@@ -13,6 +21,11 @@ GM::GM(sf::RenderWindow* _scr): State(_scr) {
 }
 bool GM::mainloop() {
     if (exitflag || !scr) return false;
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
+        reset();
+        return true;
+    }
 
     int st = mstime(); double frame = 1000/60.0;
 
