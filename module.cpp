@@ -1,3 +1,4 @@
+#include "module.hpp"
 #include "ship2.hpp"
 
 void Module::swap(Ship* s) {

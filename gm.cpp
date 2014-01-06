@@ -18,15 +18,16 @@ void GM::reset() {
 	Interactive* intr = add(new Ship());
 	intr->initall(this,0,0);
 
-    aclayer = lradd(new Layer("aurpilkutyryry.png"));
-    aclayer->initall(this,0,0);
+    aclayer = new Layer("aurpilkutyryry.png");
+    add(aclayer)->initall(this,0,0);
 	aclayer->start_camerafollow(intr);
 
-    camera = camadd(new Camera());
-    camera->initall(this,0,0);
+    camera = new Camera();
+    add(camera)->initall(this,0,0);
 	camera->start_camerafollow(intr);
 
-    lradd(new BGLayer())->initall(this,0,0);
+    BGLayer* bg = new BGLayer();
+    add(bg)->initall(this,0,0);
 }
 bool GM::mainloop() {
     if (exitflag || !scr) return false;
@@ -47,7 +48,7 @@ bool GM::mainloop() {
     sf::Event event;
     while (scr->pollEvent(event))
     {
-        if (event.type == sf::Event::Closed) {
+        if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
             scr->close();
             return false;
         }
@@ -56,7 +57,7 @@ bool GM::mainloop() {
     for (i=0; i<objects.size(); i++) objects[i]->act();
     // if drawing is taking too long (lag piled up from a couple of frames),
     // might just skip a frame
-    if (lag<frame*3) {
+    if (lag<frame*60) {
         for (i=0; i<objects.size(); i++) {
             objects[i]->draw();
         }

@@ -34,8 +34,6 @@ class State {
         void clearall();
 
         Interactive* prev();
-        Layer* lradd(Layer*);
-        Camera* camadd(Camera*);
         Interactive* add(Interactive*);
         void add2();
         void remove(Interactive*);

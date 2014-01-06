@@ -1,5 +1,6 @@
 #include "ship2.hpp"
 #include "state.hpp"
+#include "markov.hpp"
 #include "math.h"
 #include <iostream>
 //#include <SFML/Keyboard.hpp>
@@ -8,6 +9,17 @@ double rad(double n) {
     return n*180/3.14159;
 }
 
+void Ship::specs() {
+    speed=0.3;
+    slow=1.02;
+    grav=0.1;
+    turn=3.14159/45.0;
+    modi = new Flamer(this);
+    modi->initall(gm,x,y);
+    cargo.push_back(new TurretMod(this));
+    cargo.back()->initall(gm,x,y);
+    set_keys();
+}
 void Ship::spawn()  {
     gm->add(new Ship(/*gm,x,y*/))->initall(gm,x,y);
 }

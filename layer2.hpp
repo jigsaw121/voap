@@ -36,7 +36,7 @@ class Layer: public Interactive {
 
 class BGLayer: public Layer {
 	public:
-        BGLayer(/*State* _gm, double _x, double _y*/): Layer(/*_gm,_x,_y*/"") {}
+        BGLayer(/*State* _gm, double _x, double _y*/): Layer(/*_gm,_x,_y*/) {}
 		virtual void imginit() {}
 		virtual void draw() {
 			screen()->clear(sf::Color(160,60,40));

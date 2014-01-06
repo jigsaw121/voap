@@ -10,6 +10,12 @@ class Module: public MovingObj {
         Ship* host;
 
         explicit Module(/*State* _gm, double _x, double _y,*/ Ship* _host): MovingObj(/*_gm,_x,_y*/) { host = _host; }
+        virtual void typeinit3() {
+			types.push_back(Typenum::MODULE);
+			typeinit4();
+		}
+		virtual void typeinit4() {}
+
         virtual void move() {}
         // when a ship dies it calls this
         virtual void die_consequence() {}

@@ -4,6 +4,8 @@
 #include "module.hpp"
 #include "movingobj.hpp"
 
+class Ship;
+
 class TrailMod: public Module {
 	// attributes changed depending on ship
 	public:
@@ -44,6 +46,12 @@ class Turret: public MovingObj {
 			}
 		}
 
+		virtual void specs() {
+            speed=1.0;
+            slow=1.1;
+            grav=0.2;
+        }
+
 		/*virtual void specinit() {
 			dx=0.0; dy=0.0; angle=0.0;
 			specs();
@@ -69,4 +77,25 @@ class MineLayer: public Module {
 		explicit MineLayer(Ship* s): Module(s) {}
 		virtual void use();
 		virtual void die_consequence();
+};
+
+class Flamer: public Module {
+	public:
+		explicit Flamer(Ship* s): Module(s) {}
+		virtual void use();
+};
+
+class Flame: public MovingObj {
+	public:
+		explicit Flame(): MovingObj() {
+		    // should do that delay structure again
+		    //gm->add(new Delay(200, die));
+        }
+        virtual void specs() {
+            speed=8.0;
+            slow=1.1;
+            grav=0.1;
+        }
+        virtual void dimsinit() { w=8; h=8; }
+		virtual void act();
 };

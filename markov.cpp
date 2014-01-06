@@ -1,6 +1,8 @@
 #include "markov.hpp"
 #include "types.hpp"
+#include "ship2.hpp"
 #include "state.hpp"
+#include <math.h>
 
 void TrailMod::act() {
 	// module follows ship, constantly spawns trail atoms that block/hurt
@@ -15,22 +17,25 @@ void TurretMod::use() {
 	// turret building can be accelerated with slow turrets
 	// and they can be repaired later
 	// (there are different types that inherit from this)
-	gm->add(new Turret())->initall(gm,x,y);
+	Turret* t = new Turret();
+	gm->add(t);
+	t->initall(gm,host->x,host->y);
+	t->push(host->dx,host->dy);
 }
 
 void Turret::fall(int* state) {
-	if (collideone(Typenum::MOVING)) {
+	/*if (collideone(Typenum::MOVING)) {
 		// bounce back!
 		// enemies might juggle turret seeds to block them, and other emergent behaviour
 		x -= dx; y -= dy;
 		dx = -dx/1.1; dy = -dy/1.1;
-	}
-	if (collideone(Typenum::WALL)) {
+	}*/
+	/*if (collideone(Typenum::WALL)) {
 		// should I have a swapstate() for all Interactives?
 		//vact = &build;
 		*state = 1;
 		return;
-	}
+	}*/
 	x += dx;
 	y += dy;
 	dy += grav;
@@ -71,4 +76,18 @@ void MineLayer::use() {
 	// (there are different types that inherit from this)
 
 	//gm->add(/* new Mine() */)->initall(gm,x,y);
+}
+
+void Flamer::use() {
+    Flame* f = new Flame();
+	gm->add(f);
+	f->initall(gm,host->x,host->y);
+	f->push(cos(host->angle+(std::rand()%20)/60.0)*8.0+host->dx,
+            sin(host->angle+(std::rand()%20)/60.0)*8.0+host->dy);
+}
+
+void Flame::act() {
+    // if collides with a ship, stick to it
+    // dies in some 200 frames
+    genmove();
 }

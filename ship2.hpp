@@ -1,8 +1,9 @@
 #ifndef SHIP2_HPP
 #define SHIP2_HPP
 #include "movingobj.hpp"
-#include "module.hpp"
 #include "types.hpp"
+
+class Module;
 
 class Ship: public MovingObj {
     public:
@@ -22,13 +23,7 @@ class Ship: public MovingObj {
 		}
 		virtual void typeinit4() {}
 
-		virtual void specs() {
-			speed=0.3;
-            slow=1.02;
-            grav=0.1;
-            turn=3.14159/45.0;
-			set_keys();
-        }
+		virtual void specs();
         virtual void spawn();
         void set_keys();
         virtual void move();

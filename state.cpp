@@ -22,14 +22,6 @@ Interactive* State::add(Interactive* obj) {
     introbuffer.push_back(obj);
 	return obj;
 }
-Layer* State::lradd(Layer* obj) {
-    introbuffer.push_back(static_cast<Interactive*>(obj));
-	return obj;
-}
-Camera* State::camadd(Camera* obj) {
-    introbuffer.push_back(static_cast<Interactive*>(obj));
-	return obj;
-}
 Interactive* State::prev() {
 	// for quick references on inits
 	// inits are messy enough already, give them a break

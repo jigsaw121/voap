@@ -17,7 +17,7 @@ class MovingObj: public Interactive {
 		virtual void typeinit3() {}
 
 		virtual void specinit() {
-			dx=0.0; dy=0.0; angle=0.0;
+			dx=0.0; dy=0.0; angle= -3.14159/2.0;
 			specs();
 		}
         virtual void specs() {
@@ -25,6 +25,7 @@ class MovingObj: public Interactive {
             slow=1.1;
             grav=0.1;
         }
+        virtual void genmove() { x += dx; y += dy; }
         virtual void move() {}
         virtual void push(double _dx, double _dy) { dx+=_dx; dy+=_dy; }
 };
