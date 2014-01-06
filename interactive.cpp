@@ -11,6 +11,9 @@ bool Interactive::collide(Interactive* obj) {
               (x > obj->x+obj->w) ||
               (x+w < obj->x) );
 }
+bool Interactive::matchteam(Interactive* a, Interactive* b) {
+    return a->team == b->team;
+}
 bool Interactive::matchtype(std::vector<Typenum::type> types, int ftype) {
     // at least one of the types matches
     unsigned int j;
@@ -28,6 +31,7 @@ std::vector<Interactive*> Interactive::find(int ftype) {
     for (i=0; i<gm->objects.size(); i++) {
         obj = gm->objects[i];
 
+        if (matchteam(obj, this)) continue;
         if (!matchtype(obj->types, ftype)) continue;
 
         if (abs(obj->x-x)>obj->w+w || abs(obj->y-y)>obj->h+h) continue;
@@ -77,9 +81,9 @@ void Interactive::remove() {
 }
 void Interactive::die() {
     // oh look a boolean
-	// crude but it works I guess
+    // crude but it works I guess
     remove();
-	dying = true;
+    dying = true;
 }
 sf::RenderWindow* Interactive::screen() {
     return gm->scr;
@@ -98,5 +102,5 @@ Layer* Interactive::get_active_layer() {
     return gm->aclayer;
 }
 sf::Vector2<float> Interactive::camera() {
-	return gm->camera->offset();
+    return gm->camera->offset();
 }

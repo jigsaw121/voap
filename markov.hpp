@@ -7,59 +7,73 @@
 class Ship;
 
 class TrailMod: public Module {
-	// attributes changed depending on ship
-	public:
-		explicit TrailMod(Ship* s): Module(s) {}
-		// main functionality acts, passive (always on?)
-		virtual void act();
+    // attributes changed depending on ship
+    public:
+        explicit TrailMod(Ship* s): Module(s) {}
+        // main functionality acts, passive (always on?)
+        virtual void act();
+};
+
+class Bullet: public MovingObj {
+    // attributes changed depending on ship
+    public:
+        explicit Bullet(): MovingObj() {}
+        void lifedelay(int);
+};
+
+class Trail: public Bullet {
+    public:
+        explicit Trail();/*: MovingObj() {}*/
+        virtual void dimsinit() { w=20; h=8; }
+        virtual void act() {}
 };
 
 class TurretMod: public Module {
-	// attributes changed depending on ship
-	public:
-		explicit TurretMod(Ship* s): Module(s) {}
-		virtual void use();
-		virtual void act() {}
+    // attributes changed depending on ship
+    public:
+        explicit TurretMod(Ship* s): Module(s) {}
+        virtual void use();
+        virtual void act() {}
 };
 
 // could be in a separate file later
 class Turret: public MovingObj {
-	public:
-		explicit Turret(): MovingObj() {}
+    public:
+        explicit Turret(): MovingObj() {}
 
-		// function pointers yay
-		//void (*vact)(Turret* self);
-		virtual void act() { //vact(this);
-			// at any time, if it's blown up, it dies
-			// better to destroy before it spawns
+        // function pointers yay
+        //void (*vact)(Turret* self);
+        virtual void act() { //vact(this);
+            // at any time, if it's blown up, it dies
+            // better to destroy before it spawns
 
-			// or even further, a state manager interface thingy with method pointers
-			static int state = 0;
-			switch(state) {
-				case 0:
-					fall(&state); break;
-				case 1:
-					build(&state); break;
-				case 2:
-					// can't change state so doesn't take that argument
-					aim(); break;
-			}
-		}
+            // or even further, a state manager interface thingy with method pointers
+            static int state = 0;
+            switch(state) {
+                case 0:
+                    fall(&state); break;
+                case 1:
+                    build(&state); break;
+                case 2:
+                    // can't change state so doesn't take that argument
+                    aim(); break;
+            }
+        }
 
-		virtual void specs() {
+        virtual void specs() {
             speed=1.0;
             slow=1.1;
             grav=0.2;
         }
 
-		/*virtual void specinit() {
-			dx=0.0; dy=0.0; angle=0.0;
-			specs();
-			vact = &fall;
-		}*/
-		void fall(int*);
-		void build(int*);
-		void aim();
+        /*virtual void specinit() {
+            dx=0.0; dy=0.0; angle=0.0;
+            specs();
+            vact = &fall;
+        }*/
+        void fall(int*);
+        void build(int*);
+        void aim();
 };
 // not very C++ though
 // might do a switch-case state machine thingy for act() instead
@@ -71,31 +85,28 @@ class Turret: public MovingObj {
 //void aim(Turret* self);
 // ei ollukkaan huva tama
 
-class MineLayer: public Module {
-	// attributes changed depending on ship
-	public:
-		explicit MineLayer(Ship* s): Module(s) {}
-		virtual void use();
-		virtual void die_consequence();
+class MineLayer: public Weapon {
+    // attributes changed depending on ship
+    public:
+        explicit MineLayer(Ship* s): Weapon(s) {}
+        virtual void use();
+        virtual void die_consequence();
 };
 
-class Flamer: public Module {
-	public:
-		explicit Flamer(Ship* s): Module(s) {}
-		virtual void use();
+class Flamer: public Weapon {
+    public:
+        explicit Flamer(Ship* s): Weapon(s) {}
+        virtual void use();
 };
 
-class Flame: public MovingObj {
-	public:
-		explicit Flame(): MovingObj() {
-		    // should do that delay structure again
-		    //gm->add(new Delay(200, die));
-        }
+class Flame: public Bullet {
+    public:
+        explicit Flame();
         virtual void specs() {
             speed=8.0;
             slow=1.1;
             grav=0.1;
         }
         virtual void dimsinit() { w=8; h=8; }
-		virtual void act();
+        virtual void act();
 };

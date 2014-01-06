@@ -20,11 +20,11 @@ void State::clearall() {
 }
 Interactive* State::add(Interactive* obj) {
     introbuffer.push_back(obj);
-	return obj;
+    return obj;
 }
 Interactive* State::prev() {
-	// for quick references on inits
-	// inits are messy enough already, give them a break
+    // for quick references on inits
+    // inits are messy enough already, give them a break
     return introbuffer.back();
 }
 void State::add2() {

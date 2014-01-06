@@ -6,25 +6,25 @@
 //#include <SFML/Keyboard.hpp>
 
 GM::GM(sf::RenderWindow* _scr): State(_scr) {
-	reset();
+    reset();
 }
 void GM::reset() {
     // just gotta remember to call initall every time it's needed
-	// and if things change, to call a different one
-	// these are pushed in the reverse order... not too intuitive
-	// especially with the prev() references
-	clearall();
+    // and if things change, to call a different one
+    // these are pushed in the reverse order... not too intuitive
+    // especially with the prev() references
+    clearall();
 
-	Interactive* intr = add(new Ship());
-	intr->initall(this,0,0);
+    Interactive* intr = add(new Ship());
+    intr->initall(this,0,0);
 
     aclayer = new Layer("aurpilkutyryry.png");
     add(aclayer)->initall(this,0,0);
-	aclayer->start_camerafollow(intr);
+    aclayer->start_camerafollow(intr);
 
     camera = new Camera();
     add(camera)->initall(this,0,0);
-	camera->start_camerafollow(intr);
+    camera->start_camerafollow(intr);
 
     BGLayer* bg = new BGLayer();
     add(bg)->initall(this,0,0);

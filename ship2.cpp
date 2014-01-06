@@ -16,7 +16,9 @@ void Ship::specs() {
     turn=3.14159/45.0;
     modi = new Flamer(this);
     modi->initall(gm,x,y);
-    cargo.push_back(new TurretMod(this));
+    //cargo.push_back(new TurretMod(this));
+    //cargo.back()->initall(gm,x,y);
+    cargo.push_back(new TrailMod(this));
     cargo.back()->initall(gm,x,y);
     set_keys();
 }
@@ -70,20 +72,22 @@ void Ship::bump() {
 
 void Ship::act() {
     move();
-	mods();
+    mods();
     //bump();
 }
 
 void Ship::mods() {
-	if (sf::Keyboard::isKeyPressed(skey)) modi->use();
-	if (sf::Keyboard::isKeyPressed(ckey)) modi->swap(this);
+    if (modi==NULL) return;
+    modi->act();
+    if (sf::Keyboard::isKeyPressed(skey)) modi->use();
+    if (sf::Keyboard::isKeyPressed(ckey)) modi->swap(this);
 }
 
 void Ship::collect() {
-	//Module m* = static_cast<Module>(collideone(MODULE_TYPE));
-	Interactive* intr = collideone(Typenum::MODULE);
-	// only implemented for module types anyway
-	intr->collectme(this);
+    //Module m* = static_cast<Module>(collideone(MODULE_TYPE));
+    Interactive* intr = collideone(Typenum::MODULE);
+    // only implemented for module types anyway
+    intr->collectme(this);
 }
 
 /*void Ship::leavefac() {
