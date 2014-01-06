@@ -1,3 +1,6 @@
+#ifndef TYPES_HPP
+#define TYPES_HPP
+
 // each Interactive contains at least one of these types
 // (as many as their nesting depth)
 // also illustrates the inheritance tree at a quick glance
@@ -32,8 +35,10 @@ namespace Typenum {
 						ROCKET,
 						BOMB,
 			ENGINEER // for non-gameplay types that still inherit from Interactive, like GUI stuff
-	}
+	};
 }
+
+#endif
 
 //#include "types.hpp"
 //	virtual void typeinit3() {

@@ -1,5 +1,7 @@
 #include "gm.hpp"
 #include "ship2.hpp"
+#include "layer2.hpp"
+#include "camera.hpp"
 #include <iostream>
 //#include <SFML/Keyboard.hpp>
 
@@ -15,8 +17,15 @@ void GM::reset() {
 
 	Interactive* intr = add(new Ship());
 	intr->initall(this,0,0);
-	aclayer = lradd(new Layer("aurpilkutyryry.png")); aclayer->initall(this,0,0);
+
+    aclayer = lradd(new Layer("aurpilkutyryry.png"));
+    aclayer->initall(this,0,0);
 	aclayer->start_camerafollow(intr);
+
+    camera = camadd(new Camera());
+    camera->initall(this,0,0);
+	camera->start_camerafollow(intr);
+
     lradd(new BGLayer())->initall(this,0,0);
 }
 bool GM::mainloop() {

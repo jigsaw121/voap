@@ -1,7 +1,7 @@
 #ifndef MOVINGOBJ_HPP
 #define MOVINGOBJ_HPP
-#include "interactive.hpp"
 #include "types.hpp"
+#include "interactive.hpp"
 
 class MovingObj: public Interactive {
     public:
@@ -15,7 +15,7 @@ class MovingObj: public Interactive {
 			typeinit3();
 		}
 		virtual void typeinit3() {}
-		
+
 		virtual void specinit() {
 			dx=0.0; dy=0.0; angle=0.0;
 			specs();

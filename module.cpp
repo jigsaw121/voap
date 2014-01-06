@@ -3,9 +3,9 @@
 void Module::swap(Ship* s) {
 	unsigned int i;
 	for (i=0; i<s->cargo.size(); i++) {
-		if (s->type==MODULE_TYPE) {
-			s->modi = cargo[i]; cargo.erase(i);
-			cargo.push_back(this);
+		if (matchtype(s->cargo[i]->types, Typenum::MODULE)) {
+			s->modi = s->cargo[i]; s->cargo.erase(s->cargo.begin()+i);
+			s->cargo.push_back(this);
 			return;
 		}
 	}
@@ -21,6 +21,6 @@ void Module::set_host(Ship* s) {
 
 void Module::collectme(Ship* s) {
 	if (host!=NULL) return;
-	
-	set_host(Ship* s);
+
+	set_host(s);
 }

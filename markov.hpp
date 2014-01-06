@@ -4,33 +4,33 @@
 #include "module.hpp"
 #include "movingobj.hpp"
 
-class TrailMod: public Module() {
+class TrailMod: public Module {
 	// attributes changed depending on ship
 	public:
-		explicit TrailMod(): Module() {}
+		explicit TrailMod(Ship* s): Module(s) {}
 		// main functionality acts, passive (always on?)
 		virtual void act();
-}
+};
 
-class TurretMod: public Module() {
+class TurretMod: public Module {
 	// attributes changed depending on ship
 	public:
-		explicit TurretMod(): Module() {}
+		explicit TurretMod(Ship* s): Module(s) {}
 		virtual void use();
-		virtual void act();
-}
+		virtual void act() {}
+};
 
 // could be in a separate file later
-class Turret: public MovingObj() {
+class Turret: public MovingObj {
 	public:
 		explicit Turret(): MovingObj() {}
-		
+
 		// function pointers yay
 		//void (*vact)(Turret* self);
 		virtual void act() { //vact(this);
 			// at any time, if it's blown up, it dies
 			// better to destroy before it spawns
-		
+
 			// or even further, a state manager interface thingy with method pointers
 			static int state = 0;
 			switch(state) {
@@ -43,7 +43,7 @@ class Turret: public MovingObj() {
 					aim(); break;
 			}
 		}
-		
+
 		/*virtual void specinit() {
 			dx=0.0; dy=0.0; angle=0.0;
 			specs();
@@ -52,7 +52,7 @@ class Turret: public MovingObj() {
 		void fall(int*);
 		void build(int*);
 		void aim();
-}
+};
 // not very C++ though
 // might do a switch-case state machine thingy for act() instead
 // a turret falls first until it hits the ground
@@ -63,10 +63,10 @@ class Turret: public MovingObj() {
 //void aim(Turret* self);
 // ei ollukkaan huva tama
 
-class MineLayer: public Module() {
+class MineLayer: public Module {
 	// attributes changed depending on ship
 	public:
-		explicit MineLayer(): Module() {}
+		explicit MineLayer(Ship* s): Module(s) {}
 		virtual void use();
 		virtual void die_consequence();
-}
+};

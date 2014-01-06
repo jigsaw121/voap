@@ -1,8 +1,6 @@
 #ifndef GM_HPP
 #define GM_HPP
-#include "layer2.hpp"
 #include "state.hpp"
-#include "ship2.hpp"
 
 class GM: public State {
     // game states are a stack, this is the in-game one

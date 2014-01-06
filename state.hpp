@@ -3,11 +3,12 @@
 
 #include <SFML/Graphics.hpp>
 //#include "interactive.hpp"
-class Interactive;
 class Layer;
 //#include "layer2.hpp"
 #include <vector>
 #include <iostream>
+class Interactive;
+class Camera;
 
 class State {
     public:
@@ -15,6 +16,7 @@ class State {
         sf::Clock clock;
         sf::RenderWindow* scr;
         Layer* aclayer;
+        Camera* camera;
         std::vector<Interactive*> objects;
         std::vector<Interactive*> introbuffer;
         std::vector<Interactive*> erasebuffer;
@@ -33,6 +35,7 @@ class State {
 
         Interactive* prev();
         Layer* lradd(Layer*);
+        Camera* camadd(Camera*);
         Interactive* add(Interactive*);
         void add2();
         void remove(Interactive*);

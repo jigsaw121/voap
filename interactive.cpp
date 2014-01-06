@@ -1,5 +1,7 @@
 #include "interactive.hpp"
 #include "layer2.hpp"
+#include "state.hpp"
+#include "camera.hpp"
 #include <iostream>
 
 bool Interactive::collide(Interactive* obj) {
@@ -9,6 +11,14 @@ bool Interactive::collide(Interactive* obj) {
               (x > obj->x+obj->w) ||
               (x+w < obj->x) );
 }
+bool Interactive::matchtype(std::vector<Typenum::type> types, int ftype) {
+    // at least one of the types matches
+    unsigned int j;
+    for (j=0; j<types.size(); j++) {
+        if (types[j] == ftype) return true;
+    }
+    return false;
+}
 std::vector<Interactive*> Interactive::find(int ftype) {
     std::vector<Interactive*> out;
 
@@ -17,7 +27,9 @@ std::vector<Interactive*> Interactive::find(int ftype) {
     unsigned int i; Interactive* obj;
     for (i=0; i<gm->objects.size(); i++) {
         obj = gm->objects[i];
-        if (obj->type != ftype) continue;
+
+        if (!matchtype(obj->types, ftype)) continue;
+
         if (abs(obj->x-x)>obj->w+w || abs(obj->y-y)>obj->h+h) continue;
         out.push_back(obj);
     }
@@ -73,7 +85,7 @@ sf::RenderWindow* Interactive::screen() {
     return gm->scr;
 }
 void Interactive::gendraw() {
-    sf::Vector2<float> pos = offset();
+    sf::Vector2<float> pos = camera();
     // really? am I supposed to do it like this?
     spr.setPosition(pos.x+x, pos.y+y);
     //std::cout<<"I'm drawn at "<<pos.x+x<<", "<<pos.y+y<<"\n";
@@ -85,6 +97,6 @@ void Interactive::spawn() {
 Layer* Interactive::get_active_layer() {
     return gm->aclayer;
 }
-sf::Vector2<float> Interactive::camera(); { 
-	return gm->camera->offset(); 
+sf::Vector2<float> Interactive::camera() {
+	return gm->camera->offset();
 }

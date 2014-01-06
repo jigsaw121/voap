@@ -1,5 +1,6 @@
 #include "interactive.hpp"
 #include "layer2.hpp"
+#include "camera.hpp"
 #include "state.hpp"
 
 int State::findintr(std::vector<Interactive*> objs, Interactive* obj) {
@@ -11,6 +12,8 @@ int State::findintr(std::vector<Interactive*> objs, Interactive* obj) {
 }
 void State::clearall() {
     // gotta free memory, etc.
+    aclayer = NULL;
+    camera = NULL;
     introbuffer.clear();
     erasebuffer.clear();
     objects.clear();
@@ -20,6 +23,10 @@ Interactive* State::add(Interactive* obj) {
 	return obj;
 }
 Layer* State::lradd(Layer* obj) {
+    introbuffer.push_back(static_cast<Interactive*>(obj));
+	return obj;
+}
+Camera* State::camadd(Camera* obj) {
     introbuffer.push_back(static_cast<Interactive*>(obj));
 	return obj;
 }

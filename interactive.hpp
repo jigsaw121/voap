@@ -1,9 +1,12 @@
-#ifndef INTERACTIVE_H
-#define INTERACTIVE_H
+#ifndef INTERACTIVE_HPP
+#define INTERACTIVE_HPP
 #include <SFML/Graphics.hpp>
-#include "state.hpp"
 #include <vector>
 #include "types.hpp"
+
+class Ship;
+class State;
+class Layer;
 
 class Interactive {
     public:
@@ -39,7 +42,7 @@ class Interactive {
 		// could just have a type vector
 		// so you could search for any type, all inheritants, or just one specific type
 		// (even under specific conditions if necessary)
-        virtual void typeinit() { //type = 0; 
+        virtual void typeinit() { //type = 0;
 			types.push_back(Typenum::ANY);
 			typeinit2();
 		}
@@ -68,14 +71,16 @@ class Interactive {
         virtual void draw() { gendraw(); }
         virtual void remove();
         virtual void die();
-		
+
 		// implemented for modules only
 		virtual void set_host(Ship*) {}
 		virtual void collectme(Ship*) {}
+		virtual void explode() {}
 
         sf::RenderWindow* screen();
 
         virtual bool collide(Interactive* obj);
+        bool matchtype(std::vector<Typenum::type>, int);
         std::vector<Interactive*> find(int ftype);
         std::vector<Interactive*> mergevectors(std::vector<Interactive*> a, std::vector<Interactive*> b);
         std::vector<Interactive*> collidetype(int type);
@@ -83,6 +88,7 @@ class Interactive {
         Interactive* collideone(int type);
 
 		Layer* get_active_layer();
-		sf::Vector2<float> offset();
+		sf::Vector2<float> camera();
 };
+
 #endif

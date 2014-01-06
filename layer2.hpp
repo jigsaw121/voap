@@ -11,14 +11,14 @@ class Layer: public Interactive {
 		double parallax;
 
         explicit Layer(std::string _filename="", double _parallax=1.0): Interactive() { filename = _filename; parallax = _parallax; }
-		virtual void typeinit2() { 
+		virtual void typeinit2() {
 			types.push_back(Typenum::ENGINEER);
 			typeinit3();
 		}
 		virtual void typeinit3() {}
-		
+
 		virtual void specinit() {
-			start_camerafollow(NULL);
+			//start_camerafollow(NULL);
 		}
 		virtual void imginit() {
 			if (filename.empty()) return;

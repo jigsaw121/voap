@@ -10,23 +10,24 @@ class Module: public MovingObj {
         Ship* host;
 
         explicit Module(/*State* _gm, double _x, double _y,*/ Ship* _host): MovingObj(/*_gm,_x,_y*/) { host = _host; }
-        virtual void move();
+        virtual void move() {}
         // when a ship dies it calls this
         virtual void die_consequence() {}
-        
-		virtual void use() {}; 
+
+		virtual void use() {};
         virtual void swap(Ship* s);
 		virtual void act() {}
 		virtual void draw() {
 			// only drawn as a module image if not wielded/cargoed
 			if (host==NULL) gendraw();
 		}
-		
+
 		virtual void set_host(Ship*);
 		virtual void collectme(Ship*);
 };
-class Weapon: public Module() {
+
+class Weapon: public Module {
 	public:
 		int cooldown;
-		explicit Weapon(): Module() { cooldown=0; }
-}
+		explicit Weapon(Ship* _host): Module(_host) { cooldown=0; }
+};

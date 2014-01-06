@@ -1,4 +1,5 @@
 #include "ship2.hpp"
+#include "state.hpp"
 #include "math.h"
 #include <iostream>
 //#include <SFML/Keyboard.hpp>
@@ -7,6 +8,9 @@ double rad(double n) {
     return n*180/3.14159;
 }
 
+void Ship::spawn()  {
+    gm->add(new Ship(/*gm,x,y*/))->initall(gm,x,y);
+}
 void Ship::set_keys() {
     lkey = sf::Keyboard::Left;
     rkey = sf::Keyboard::Right;
@@ -59,13 +63,13 @@ void Ship::act() {
 }
 
 void Ship::mods() {
-	if (sf::Keyboard::isKeyPressed(skey)) modi.use();
-	if (sf::Keyboard::isKeyPressed(ckey)) modi.swap(this);
+	if (sf::Keyboard::isKeyPressed(skey)) modi->use();
+	if (sf::Keyboard::isKeyPressed(ckey)) modi->swap(this);
 }
 
 void Ship::collect() {
 	//Module m* = static_cast<Module>(collideone(MODULE_TYPE));
-	Interactive* intr = collideone(MODULE_TYPE);
+	Interactive* intr = collideone(Typenum::MODULE);
 	// only implemented for module types anyway
 	intr->collectme(this);
 }

@@ -21,7 +21,7 @@ class Ship: public MovingObj {
 			typeinit4();
 		}
 		virtual void typeinit4() {}
-		
+
 		virtual void specs() {
 			speed=0.3;
             slow=1.02;
@@ -29,14 +29,7 @@ class Ship: public MovingObj {
             turn=3.14159/45.0;
 			set_keys();
         }
-        virtual void init() {
-            //types stype;
-            //stype = SHIP_TYPE;
-            type = 2;
-        }
-        virtual void spawn() {
-            gm->add(new Ship(/*gm,x,y*/))->initall(gm,x,y);
-        }
+        virtual void spawn();
         void set_keys();
         virtual void move();
         virtual void act();
