@@ -13,7 +13,7 @@ void TrailMod::act() {
     //gm->add(/* new trail of the current type at this pos */)->initall(gm,x,y);
     Trail* t = new Trail();
     gm->add(t);
-    t->initall(gm,host->x,host->y);
+    t->initall(gm,host->x,host->y,team);
     t->lifedelay(200);
 }
 
@@ -100,7 +100,7 @@ void MineLayer::use() {
 void Flamer::use() {
     Flame* f = new Flame();
     gm->add(f);
-    f->initall(gm,host->x,host->y);
+    f->initall(gm,host->x,host->y,team);
     f->push(cos(host->angle+(std::rand()%20)/60.0)*8.0+host->dx,
             sin(host->angle+(std::rand()%20)/60.0)*8.0+host->dy);
     f->lifedelay(200);

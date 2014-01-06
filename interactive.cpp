@@ -6,8 +6,8 @@
 
 bool Interactive::collide(Interactive* obj) {
     // optimizations in searching for types
-    return !( (y+w < obj->y) ||
-              (y > obj->y+obj->w) ||
+    return !( (y+h < obj->y) ||
+              (y > obj->y+obj->h) ||
               (x > obj->x+obj->w) ||
               (x+w < obj->x) );
 }

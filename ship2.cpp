@@ -15,15 +15,15 @@ void Ship::specs() {
     grav=0.1;
     turn=3.14159/45.0;
     modi = new Flamer(this);
-    modi->initall(gm,x,y);
+    modi->initall(gm,x,y,team);
     //cargo.push_back(new TurretMod(this));
     //cargo.back()->initall(gm,x,y);
     cargo.push_back(new TrailMod(this));
-    cargo.back()->initall(gm,x,y);
+    cargo.back()->initall(gm,x,y,team);
     set_keys();
 }
 void Ship::spawn()  {
-    gm->add(new Ship(/*gm,x,y*/))->initall(gm,x,y);
+    gm->add(new Ship(/*gm,x,y*/))->initall(gm,x,y,team);
 }
 void Ship::set_keys() {
     lkey = sf::Keyboard::Left;

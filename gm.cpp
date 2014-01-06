@@ -16,7 +16,9 @@ void GM::reset() {
     clearall();
 
     Interactive* intr = add(new Ship());
-    intr->initall(this,0,0);
+	// a factory generates ships/modules of its type
+	// and a ship generates bullets of its type
+    intr->initall(this,0,0,0);
 
     aclayer = new Layer("aurpilkutyryry.png");
     add(aclayer)->initall(this,0,0);
