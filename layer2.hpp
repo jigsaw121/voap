@@ -26,9 +26,9 @@ class Layer: public Interactive {
             spr.setTexture(texture);
         }
         void start_camerafollow(Interactive*);
-        virtual void camerafollow();
+        virtual void camerafollow() {}
         virtual void act() {
-            camerafollow();
+            //camerafollow();
             //if (!follow) return;
             //std::cout<<x<<", "<<y<<" "<<follow->x<<", "<<follow->y<<"\n";
         }

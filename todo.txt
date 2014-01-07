@@ -1,0 +1,7 @@
+-module types
+	-see enum for a list
+-factory
+-mineral harvesting
+-specs
+	-ships
+	-drops

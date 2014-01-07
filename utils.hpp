@@ -27,8 +27,8 @@ class LifeDelay: public Engineer {
 
         virtual void die() {
             remove();
-            //dying = true;
-            attach->remove();
+            dying = true;
+            attach->die();
         }
         virtual void act() {
             if (delay<=0) {

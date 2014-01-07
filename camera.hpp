@@ -16,5 +16,9 @@ class Camera: public Layer {
             sf::Vector2<float> cntr(-x+w/2,-y+h/2);
             return cntr;
         }
+
+        virtual void act() {
+            camerafollow();
+        }
 };
 #endif

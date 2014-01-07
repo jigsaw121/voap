@@ -58,7 +58,7 @@ class Interactive {
             texture.update(image);
             //img.setSmooth(false);
             spr.setTexture(texture);
-            //spr.setOrigin(20, 20);
+            spr.setOrigin(w/2, h/2);
         }
 
         void skip() {}

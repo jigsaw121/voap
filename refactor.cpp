@@ -654,3 +654,31 @@ bool GM::mainloop() {
 	return true;
 }
 
+class Behaviour {
+	public:
+		// might have to take the host as an argument
+		virtual void act() {}
+};
+class SGShipDef: Behaviour {
+	public:
+		// normal movement
+		virtual void move();
+		// act, use, swap
+		virtual void mods();
+		virtual void act() {
+			move();
+			mods();
+		}
+};
+class SGShipFac: Behaviour {
+	public:
+		// factory menu thingy
+		virtual void move();
+		// only acts
+		virtual void mods();
+};
+// in Ship
+Behaviour* sg;
+sg->act();
+
+// in Factory
