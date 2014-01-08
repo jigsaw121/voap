@@ -7,7 +7,29 @@
 
 void Spy::use() {
 	// get next owned bullet, use as camerafollow
-	// reset quickly somehow
+	// reset quickly to ship somehow
+	std::vector<Bullet*> own = host->bullets();
+	
+	// the camera follows our ship at first
+	// so if there's bullets, we get one of those
+	if (gm->camera->follow==host && own.size()>0) {
+		// take first or last?
+		gm->camera->follow = own[0];
+		return;
+	}
+	
+	// get the next one from the current
+	unsigned int i;
+	for (i=1; i<own.size(); i++) {
+		if (gm->camera->follow==own[i-1]) {
+			gm->camera->follow = own[i];
+			return;
+		}
+	}
+	
+	// if not found (last one is followed), just focus on the ship again
+	// gotta remember to reset the camera on focused bullet death
+	gm->camera->follow = host;
 }
 
 void Detonate::use() {
@@ -20,6 +42,23 @@ void Detonate::use() {
 		//if (matchtype(own[i]->types, Typenum::BULLET)) {
 			own[i]->explode();
 		//}
+	}
+}
+
+Bullet::Bullet(Ship* _host): MovingObj() {
+	host = _host;
+	if (host->bulletquery) host->hosted->push_back(this);
+} 
+
+void Bullet::die() {
+	remove();
+	dying = true;
+	unsigned int i; std::vector<Bullet*> own = host->bullets();
+	for (i=0; i<own.size(); i++) {
+		if (own[i]==this) { 
+			own.erase(own.begin()+i);
+			return;
+		}
 	}
 }
 

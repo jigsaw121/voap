@@ -31,6 +31,8 @@ class Ship: public MovingObj {
         virtual void act();
         virtual void bump();
         virtual void mods();
+        virtual void resourcedrop();
+		virtual void die();
         void collect();
 
 		// if bullets have been requested before

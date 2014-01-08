@@ -117,3 +117,14 @@ std::vector<Bullet*> Ship::bullets() {
         act();
     }
 }*/
+
+void Ship::resourcedrop() {
+	if (modi!=NULL) gm->add(modi);
+	// drop some minerals while you're at it
+}
+
+void Ship::die() {
+	remove();
+	dying = true;
+	resourcedrop();
+}

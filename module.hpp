@@ -20,7 +20,7 @@ class Module: public MovingObj {
         // when a ship dies it calls this
         virtual void die_consequence() {}
 
-        virtual void use() {};
+        virtual void use() {}
         virtual void swap(Ship* s);
         virtual void act() {}
         virtual void draw() {

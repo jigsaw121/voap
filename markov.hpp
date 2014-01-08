@@ -19,18 +19,14 @@ class Bullet: public MovingObj {
     public:
         Ship* host;
 		
-		explicit Bullet(Ship* _host): MovingObj() { host = _host; }
+		explicit Bullet(Ship* _host): MovingObj(); 
 		virtual void typeinit3() {
             types.push_back(Typenum::BULLET);
             typeinit4();
         }
         virtual void typeinit4() {}
 
-		virtual void die() {
-			remove();
-			dying = true;
-			host->bulletremove(this);
-		}
+		virtual void die();
 		
         void lifedelay(int);
 };
