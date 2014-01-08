@@ -17,15 +17,32 @@ class TrailMod: public Module {
 class Bullet: public MovingObj {
     // attributes changed depending on ship
     public:
-        explicit Bullet(): MovingObj() {}
+        Ship* host;
+		
+		explicit Bullet(Ship* _host): MovingObj() { host = _host; }
+		virtual void typeinit3() {
+            types.push_back(Typenum::BULLET);
+            typeinit4();
+        }
+        virtual void typeinit4() {}
+
+		virtual void die() {
+			remove();
+			dying = true;
+			host->bulletremove(this);
+		}
+		
         void lifedelay(int);
 };
 
 class Trail: public Bullet {
     public:
-        explicit Trail();/*: MovingObj() {}*/
+        explicit Trail(Ship*);/*: MovingObj() {}*/
         virtual void dimsinit() { w=20; h=8; }
-        virtual void act() {}
+        virtual void act() {
+			// hurt/bounce back moving objects that touch
+			// behaviour can depend on enemy/own ship modules
+		}
 };
 
 class TurretMod: public Module {
@@ -93,6 +110,16 @@ class MineLayer: public Weapon {
         virtual void die_consequence();
 };
 
+class Explosive: public Bullet {
+	public:
+		explicit Explosive(Ship* _host): Bullet(_host) {}
+		virtual void typeinit4() {
+            types.push_back(Typenum::EXPLOSIVE);
+            typeinit5();
+        }
+        virtual void typeinit5() {}
+}
+
 class Flamer: public Weapon {
     public:
         explicit Flamer(Ship* s): Weapon(s) {}
@@ -101,7 +128,7 @@ class Flamer: public Weapon {
 
 class Flame: public Bullet {
     public:
-        explicit Flame();
+        explicit Flame(Ship* _host);
         virtual void specs() {
             speed=8.0;
             slow=1.1;
@@ -109,4 +136,19 @@ class Flame: public Bullet {
         }
         virtual void dimsinit() { w=8; h=8; }
         virtual void act();
+};
+
+class Spy: public Module {
+    public:
+        explicit Spy(Ship* s): Module(s) {}
+        virtual void act() {}
+		virtual void use();
+};
+
+class Detonate: public Module {
+    public:
+        explicit Detonate(Ship* s): Module(s) {}
+		// acting could count bullets? and display
+        virtual void act() {}
+		virtual void use();
 };

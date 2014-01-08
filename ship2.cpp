@@ -90,6 +90,27 @@ void Ship::collect() {
     intr->collectme(this);
 }
 
+void Ship::hosted_init() {
+	for (i=0; i<gm->objects.size(); i++) {
+		if (matchtype(gm->objects[i]->types, Typenum::BULLET)
+			// screw it, I'll cast it for now - don't wanna change host's Ship* type
+			&& static_cast<Bullet*>(gm->objects[i])->host==this) {
+			hosted.push_back(gm->objects[i]);
+		}
+	}
+}
+
+std::vector<Bullet*> Ship::bullets() {
+	// on the first time, load bullets by a search
+	// after that, save bullets to vector 'hosted'
+	// bullet death causes removal
+	if (!bulletquery) {
+		hosted_init();
+		bulletquery = true;
+	}
+	return hosted;
+}
+
 /*void Ship::leavefac() {
     if (up) {
         act = defact;

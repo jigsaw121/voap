@@ -4,7 +4,9 @@
 
 class Camera: public Layer {
     public:
-        explicit Camera(): Layer() {}
+		double lerp;
+	
+		explicit Camera(): Layer() { lerp=0.2; }
 
         virtual void dimsinit() { w = 640; h = 480; }
         virtual void imginit() {}

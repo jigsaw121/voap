@@ -42,3 +42,14 @@ class Weapon: public Module {
         }
         virtual void typeinit5() {}
 };
+
+class Mineral: public Module {
+    public:
+        int value;
+        explicit Mineral(Ship* _host, int _value): Module(_host) { value=_value; }
+        virtual void typeinit4() {
+            types.push_back(Typenum::MINERAL);
+            typeinit5();
+        }
+        virtual void typeinit5() {}
+};

@@ -5,6 +5,24 @@
 #include "utils.hpp"
 #include <math.h>
 
+void Spy::use() {
+	// get next owned bullet, use as camerafollow
+	// reset quickly somehow
+}
+
+void Detonate::use() {
+	// explode() all explosives with this as host
+	unsigned int i; std::vector<Bullet*> own = host->bullets();
+	for (i=0; i<own.size(); i++) {
+		// typecheck not necessarily needed due to virtual explode()
+		// only bullets could have explode I guess
+		// (if a ship's module explodes it has the same effect of the ship exploding)
+		//if (matchtype(own[i]->types, Typenum::BULLET)) {
+			own[i]->explode();
+		//}
+	}
+}
+
 void TrailMod::act() {
     // module follows ship, constantly spawns trail atoms that block/hurt
     // trails disappear after a while
@@ -17,11 +35,12 @@ void TrailMod::act() {
     t->lifedelay(200);
 }
 
-Trail::Trail(): Bullet() {
+Trail::Trail(Ship* _host): Bullet() {
     /*LifeDelay* l = new LifeDelay();
     gm->add(l);
     l->initall(gm,x,y);
     l->lifedelay(200, this);*/
+	host = _host;
 }
 
 void Bullet::lifedelay(int delay) {
@@ -111,6 +130,7 @@ Flame::Flame(): Bullet() {
     gm->add(l);
     l->initall(gm,x,y);
     l->lifedelay(200, this);*/
+	host = _host;
 }
 void Flame::act() {
     // if collides with a ship, stick to it

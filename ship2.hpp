@@ -16,6 +16,7 @@ class Ship: public MovingObj {
         explicit Ship(/*State* _gm, double _x, double _y*/): MovingObj(/*_gm,x,y*/) {
             //set_keys();
             //specs();
+			bulletquery = false;
         }
         virtual void typeinit3() {
             types.push_back(Typenum::SHIP);
@@ -32,6 +33,10 @@ class Ship: public MovingObj {
         virtual void mods();
         void collect();
 
+		// if bullets have been requested before
+		bool bulletquery;
+		std::vector<Bullet*> hosted;
+		std::vector<Bullet*> bullets();
         /*void leavefac();*/
 };
 #endif

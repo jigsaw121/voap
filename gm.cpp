@@ -73,7 +73,7 @@ bool GM::mainloop() {
     // how much we're lagging from the desired fps
     // if negative (=we're ahead), gets fixed when setting _lag next frame
     lag += mstime()-st - frame;
-    std::cout<<"Target "<<frame<<", ref "<<lag<<"\n";
+    if (lag>0) std::cout<<"Target "<<frame<<", ref "<<lag<<"\n";
 
     // if we're ahead, let's just wait
     // note that _lag is at least 0
