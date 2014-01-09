@@ -9,7 +9,8 @@ class Ship: public MovingObj {
     public:
         Module* modi; //Module* m2;
         double turn;
-        sf::Keyboard::Key lkey,rkey,fwdkey,backkey,skey,ckey;
+		Player* host;
+        //sf::Keyboard::Key lkey,rkey,fwdkey,backkey,skey,ckey;
         // guess minerals inherit from Module too
         std::vector<Module*> cargo;
 

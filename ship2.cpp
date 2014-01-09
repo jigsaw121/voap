@@ -25,27 +25,30 @@ void Ship::specs() {
 void Ship::spawn()  {
     gm->add(new Ship(/*gm,x,y*/))->initall(gm,x,y,team);
 }
-void Ship::set_keys() {
+void Ship::player_init(Player* p) {
+	host = p;
+}
+/*void Ship::set_keys() {
     lkey = sf::Keyboard::Left;
     rkey = sf::Keyboard::Right;
     fwdkey = sf::Keyboard::Up;
     backkey = sf::Keyboard::Down;
     skey = sf::Keyboard::Z;
     ckey = sf::Keyboard::X;
-}
+}*/
 void Ship::move() {
-    if (sf::Keyboard::isKeyPressed(lkey)) {
+    if (sf::Keyboard::isKeyPressed(host->lkey)) {
         angle -= turn;
     }
-    if (sf::Keyboard::isKeyPressed(rkey)) {
+    if (sf::Keyboard::isKeyPressed(host->rkey)) {
         angle += turn;
     }
     spr.setRotation(rad(angle));
 
-    if (sf::Keyboard::isKeyPressed(fwdkey)) {
+    if (sf::Keyboard::isKeyPressed(host->fwdkey)) {
         dx += cos(angle)*speed; dy += sin(angle)*speed;
     }
-    if (sf::Keyboard::isKeyPressed(backkey)) {
+    if (sf::Keyboard::isKeyPressed(host->backkey)) {
         dx /= slow*2; dy /= slow*2;
     }
 
@@ -79,8 +82,8 @@ void Ship::act() {
 void Ship::mods() {
     if (modi==NULL) return;
     modi->act();
-    if (sf::Keyboard::isKeyPressed(skey)) modi->use();
-    if (sf::Keyboard::isKeyPressed(ckey)) modi->swap(this);
+    if (sf::Keyboard::isKeyPressed(host->skey)) modi->use();
+    if (sf::Keyboard::isKeyPressed(host->ckey)) modi->swap(this);
 }
 
 void Ship::collect() {
