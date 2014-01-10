@@ -26,6 +26,7 @@ namespace Typenum {
                         ENHANCE,
                         SPY,
                         DETONATE,
+                        GRAVFIELD,
                     MINERAL,
                 BULLET,
                     BEAM,

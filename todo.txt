@@ -5,3 +5,4 @@
 -specs
 	-ships
 	-drops
+-camera should show more of the direction the ship is moving towards

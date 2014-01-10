@@ -13,12 +13,33 @@ void GM::reset() {
     // and if things change, to call a different one
     // these are pushed in the reverse order... not too intuitive
     // especially with the prev() references
+    if (conf==NULL) {
+        conf = new Config();
+        //tiimi->name = "Naksuttajat";
+        // this stuff is gonna need to be encapsulated
+        // but I'm in my sketching mode
+        // a lot of this relies on an eventual config menu anyway
+        // (in which there'll be preset configs too)
+        conf->teams.push_back(new Team());
+        conf->teams.back()->id=0;
+        conf->teams.back()->add_players(1);
+        // ship type could be a generator class
+        // with valid ships based on the faction
+        conf->teams.back()->players.back()->set_ship(this, new Ship());
+    }
+
     clearall();
 
-    Interactive* intr = add(new Ship());
+    //Interactive* intr = add(new Ship());
 	// a factory generates ships/modules of its type
 	// and a ship generates bullets of its type
-    intr->initall(this,0,0,0);
+    //intr->initall(this,0,0,0);
+    int i,j;
+    for (i=0; i<conf->teams.size(); i++) {
+        for (j=0; j<conf->teams[i]->players.size(); j++) {
+            add(conf->teams[i]->players[j]);
+        }
+    }
 
     aclayer = new Layer("aurpilkutyryry.png");
     add(aclayer)->initall(this,0,0);

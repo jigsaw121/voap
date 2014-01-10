@@ -1,10 +1,17 @@
-// holds the settings, state of a match
-class Config {
-	public:
-		// teams have a factory, player settings for ship control
-		std::vector<Team*> teams;
+#include <SFML/Window.hpp>
+#include "factory.hpp"
 
-		explicit Config() {}
+class Player {
+	// track stats and keycodes, deploy queue, etc.
+	public:
+        Team* team;
+        Ship* ship;
+		sf::Keyboard::Key lkey,rkey,fwdkey,backkey,skey,ckey;
+
+		explicit Player() {}
+
+		void set_keys();
+		void set_ship(State*, Ship*);
 };
 
 class Team {
@@ -12,16 +19,17 @@ class Team {
 		std::vector<Player*> players;
 		// when the factory is dead, the team loses
 		Factory* fac;
+		int id;
 
 		explicit Team() {}
+		void add_players(int);
 };
 
-class Player {
-	// track stats and keycodes, deploy queue, etc.
+// holds the settings, state of a match
+class Config {
 	public:
-		sf::Keyboard::Key lkey,rkey,fwdkey,backkey,skey,ckey;
+		// teams have a factory, player settings for ship control
+		std::vector<Team*> teams;
 
-		explicit Player() {}
-
-		void set_keys();
+		explicit Config() {}
 };

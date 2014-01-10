@@ -18,8 +18,8 @@ class Bullet: public MovingObj {
     // attributes changed depending on ship
     public:
         Ship* host;
-		
-		explicit Bullet(Ship* _host): MovingObj(); 
+
+		explicit Bullet(Ship* _host): MovingObj();
 		virtual void typeinit3() {
             types.push_back(Typenum::BULLET);
             typeinit4();
@@ -27,7 +27,7 @@ class Bullet: public MovingObj {
         virtual void typeinit4() {}
 
 		virtual void die();
-		
+
         void lifedelay(int);
 };
 
@@ -114,7 +114,28 @@ class Explosive: public Bullet {
             typeinit5();
         }
         virtual void typeinit5() {}
-}
+        virtual void explode() {
+            // create a new explosion
+            // if the explosion touches anything, they explode
+            // for non-explosives, this means taking damage
+        }
+};
+class Mine: public Explosive {
+	public:
+		explicit Mine(Ship* _host): Explosive(_host) {}
+		virtual void typeinit5() {
+            types.push_back(Typenum::MINE);
+            typeinit6();
+        }
+        virtual void typeinit6() {}
+        virtual void act() {
+            // what could be an exception?
+            // or in what cases would exceptions occur?
+            if (collidetype(Typenum::ANY)) {
+                explode();
+            }
+        }
+};
 
 class Flamer: public Weapon {
     public:

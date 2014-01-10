@@ -28,6 +28,7 @@ class Interactive {
             //delete texture;
             //delete spr;
         }
+        // unnecessary team argument, can be fetched through own team (or -1)
         virtual void initall(State* _gm, double _x, double _y, int _team= -1) {
             // in case there's ever some weird behaviour
             gm = _gm;

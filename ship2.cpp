@@ -82,6 +82,8 @@ void Ship::act() {
 void Ship::mods() {
     if (modi==NULL) return;
     modi->act();
+    // with two mods, the ckey just toggles a swap context
+    // and whichever module you activate next gets swapped
     if (sf::Keyboard::isKeyPressed(host->skey)) modi->use();
     if (sf::Keyboard::isKeyPressed(host->ckey)) modi->swap(this);
 }
