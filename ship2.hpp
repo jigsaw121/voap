@@ -1,6 +1,8 @@
 #ifndef SHIP2_HPP
 #define SHIP2_HPP
 #include "movingobj.hpp"
+#include "markov.hpp"
+#include "config.hpp"
 #include "types.hpp"
 
 class Module;
@@ -24,10 +26,10 @@ class Ship: public MovingObj {
             typeinit4();
         }
         virtual void typeinit4() {}
+        virtual void set_keys() {}
 
         virtual void specs();
         virtual void spawn();
-        void set_keys();
         virtual void move();
         virtual void act();
         virtual void bump();
@@ -35,6 +37,9 @@ class Ship: public MovingObj {
         virtual void resourcedrop();
 		virtual void die();
         void collect();
+
+        void player_init(Player* p);
+        void hosted_init();
 
 		// if bullets have been requested before
 		bool bulletquery;

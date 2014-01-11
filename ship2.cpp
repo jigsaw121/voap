@@ -96,11 +96,12 @@ void Ship::collect() {
 }
 
 void Ship::hosted_init() {
+    unsigned int i;
 	for (i=0; i<gm->objects.size(); i++) {
 		if (matchtype(gm->objects[i]->types, Typenum::BULLET)
 			// screw it, I'll cast it for now - don't wanna change host's Ship* type
 			&& static_cast<Bullet*>(gm->objects[i])->host==this) {
-			hosted.push_back(gm->objects[i]);
+			hosted.push_back(static_cast<Bullet*>(gm->objects[i]));
 		}
 	}
 }

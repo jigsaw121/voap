@@ -1,5 +1,11 @@
+#ifndef CONFIG_HPP
+#define CONFIG_HPP
 #include <SFML/Window.hpp>
 #include "factory.hpp"
+
+class Ship;
+class State;
+class Team;
 
 class Player {
 	// track stats and keycodes, deploy queue, etc.
@@ -33,3 +39,5 @@ class Config {
 
 		explicit Config() {}
 };
+
+#endif

@@ -1,5 +1,9 @@
 #ifndef FACTORY_HPP
 #define FACTORY_HPP
+#include "interactive.hpp"
+
+class Ship;
+class Config;
 
 class Factory: public Interactive {
 	public:

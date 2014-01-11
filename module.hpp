@@ -1,3 +1,5 @@
+#ifndef MODULE_HPP
+#define MODULE_HPP
 #include "movingobj.hpp"
 
 class Ship;
@@ -53,3 +55,5 @@ class Mineral: public Module {
         }
         virtual void typeinit5() {}
 };
+
+#endif

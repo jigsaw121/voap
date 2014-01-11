@@ -1,5 +1,7 @@
 // defensive mods
 // markov ships should also be in one file and include this
+#ifndef MARKOV_HPP
+#define MARKOV_HPP
 
 #include "module.hpp"
 #include "movingobj.hpp"
@@ -19,7 +21,7 @@ class Bullet: public MovingObj {
     public:
         Ship* host;
 
-		explicit Bullet(Ship* _host): MovingObj();
+		explicit Bullet(Ship* _host);
 		virtual void typeinit3() {
             types.push_back(Typenum::BULLET);
             typeinit4();
@@ -131,7 +133,7 @@ class Mine: public Explosive {
         virtual void act() {
             // what could be an exception?
             // or in what cases would exceptions occur?
-            if (collidetype(Typenum::ANY)) {
+            if (collideone(Typenum::ANY)) {
                 explode();
             }
         }
@@ -169,3 +171,5 @@ class Detonate: public Module {
         virtual void act() {}
 		virtual void use();
 };
+
+#endif

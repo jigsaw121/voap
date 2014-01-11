@@ -6,6 +6,7 @@
 //#include <SFML/Keyboard.hpp>
 
 GM::GM(sf::RenderWindow* _scr): State(_scr) {
+    conf = NULL;
     reset();
 }
 void GM::reset() {
@@ -30,14 +31,14 @@ void GM::reset() {
 
     clearall();
 
-    //Interactive* intr = add(new Ship());
+    Interactive* intr;// = add(new Ship());
 	// a factory generates ships/modules of its type
 	// and a ship generates bullets of its type
     //intr->initall(this,0,0,0);
-    int i,j;
+    unsigned int i,j;
     for (i=0; i<conf->teams.size(); i++) {
         for (j=0; j<conf->teams[i]->players.size(); j++) {
-            add(conf->teams[i]->players[j]);
+            intr = add(conf->teams[i]->players[j]->ship);
         }
     }
 

@@ -5,6 +5,7 @@
 #include "types.hpp"
 
 class Ship;
+class Team;
 class State;
 class Layer;
 
@@ -15,7 +16,7 @@ class Interactive {
         bool dying;
         // negative team means agnostic
         // could be used for all-vs-all matches
-        int team;
+        Team* team;
         std::vector<Typenum::type> types;
 
         sf::Sprite spr;
@@ -23,17 +24,17 @@ class Interactive {
 
         explicit Interactive(/*State* _gm, double _x, double _y*/) {
             /*initall(_gm,_x,_y);*/
+            dying = false;
         }
         ~Interactive() {
             //delete texture;
             //delete spr;
         }
         // unnecessary team argument, can be fetched through own team (or -1)
-        virtual void initall(State* _gm, double _x, double _y, int _team= -1) {
+        virtual void initall(State* _gm, double _x, double _y, Team* _team=NULL) {
             // in case there's ever some weird behaviour
             gm = _gm;
             team = _team;
-            dying = false;
             dimsinit();
             shareinit(_x,_y);
             typeinit();

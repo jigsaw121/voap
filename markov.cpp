@@ -3,13 +3,14 @@
 #include "ship2.hpp"
 #include "state.hpp"
 #include "utils.hpp"
+#include "camera.hpp"
 #include <math.h>
 
 void Spy::use() {
 	// get next owned bullet, use as camerafollow
 	// reset quickly to ship somehow
 	std::vector<Bullet*> own = host->bullets();
-	
+
 	// the camera follows our ship at first
 	// so if there's bullets, we get one of those
 	if (gm->camera->follow==host && own.size()>0) {
@@ -17,7 +18,7 @@ void Spy::use() {
 		gm->camera->follow = own[0];
 		return;
 	}
-	
+
 	// get the next one from the current
 	unsigned int i;
 	for (i=1; i<own.size(); i++) {
@@ -26,7 +27,7 @@ void Spy::use() {
 			return;
 		}
 	}
-	
+
 	// if not found (last one is followed), just focus on the ship again
 	// gotta remember to reset the camera on focused bullet death
 	gm->camera->follow = host;
@@ -47,15 +48,15 @@ void Detonate::use() {
 
 Bullet::Bullet(Ship* _host): MovingObj() {
 	host = _host;
-	if (host->bulletquery) host->hosted->push_back(this);
-} 
+	if (host->bulletquery) host->hosted.push_back(this);
+}
 
 void Bullet::die() {
 	remove();
 	dying = true;
 	unsigned int i; std::vector<Bullet*> own = host->bullets();
 	for (i=0; i<own.size(); i++) {
-		if (own[i]==this) { 
+		if (own[i]==this) {
 			own.erase(own.begin()+i);
 			return;
 		}
@@ -68,18 +69,18 @@ void TrailMod::act() {
     // can be toggled on/off to save power
 
     //gm->add(/* new trail of the current type at this pos */)->initall(gm,x,y);
-    Trail* t = new Trail();
+    Trail* t = new Trail(host);
     gm->add(t);
     t->initall(gm,host->x,host->y,team);
     t->lifedelay(200);
 }
 
-Trail::Trail(Ship* _host): Bullet() {
+Trail::Trail(Ship* _host): Bullet(_host) {
     /*LifeDelay* l = new LifeDelay();
     gm->add(l);
     l->initall(gm,x,y);
     l->lifedelay(200, this);*/
-	host = _host;
+	//host = _host;
 }
 
 void Bullet::lifedelay(int delay) {
@@ -156,7 +157,7 @@ void MineLayer::use() {
 }
 
 void Flamer::use() {
-    Flame* f = new Flame();
+    Flame* f = new Flame(host);
     gm->add(f);
     f->initall(gm,host->x,host->y,team);
     f->push(cos(host->angle+(std::rand()%20)/60.0)*8.0+host->dx,
@@ -164,12 +165,12 @@ void Flamer::use() {
     f->lifedelay(200);
 }
 
-Flame::Flame(): Bullet() {
+Flame::Flame(Ship* _host): Bullet(_host) {
     /*LifeDelay* l = new LifeDelay();
     gm->add(l);
     l->initall(gm,x,y);
     l->lifedelay(200, this);*/
-	host = _host;
+	//host = _host;
 }
 void Flame::act() {
     // if collides with a ship, stick to it
